@@ -63,7 +63,7 @@ const NavBar = () => {
 
         <ul className={`menu-list ${isMenuListOpen ? "isopen" : ""}`}>
           <li>
-            <Link href={`/`} onClick={() => setIsMenuListOpen(false)}>
+            <Link href={`/dashboard`} onClick={() => setIsMenuListOpen(false)}>
               Factureaza
             </Link>
           </li>
