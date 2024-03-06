@@ -1,0 +1,40 @@
+.sh-advantages {
+  padding: 0 20px;
+  margin-top: 50px;
+  h2 {
+    color: var(--yellow);
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 30px;
+    @media screen and (min-width: 700px) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      .box {
+        align-items: start !important;
+      }
+    }
+    @media screen and (min-width: 1000px) {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      svg {
+        flex-shrink: 0;
+      }
+      div {
+        h3 {
+          font-size: 16px;
+        }
+        p {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

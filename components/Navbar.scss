@@ -1,0 +1,188 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  border-bottom: 1px solid var(--gray);
+  background-color: white;
+
+  .navbar-content {
+    position: relative;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .logo {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      span {
+        font-size: 18px;
+        font-weight: 700;
+      }
+    }
+
+    .navbar-functions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      .btn-signup {
+        padding: 7px;
+      }
+      .menu-btn {
+        justify-self: end;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        background-color: transparent;
+        border: none;
+        .line {
+          width: 100%;
+          height: 2px;
+          background-color: black;
+          border-radius: 5px;
+        }
+      }
+    }
+
+    .closedesign {
+      position: relative;
+      .line:nth-of-type(1) {
+        position: absolute;
+        transform: rotate(45deg);
+        width: 31px;
+      }
+      .line:nth-of-type(3) {
+        transform: rotate(-45deg);
+        width: 31px;
+      }
+      .line:nth-of-type(2) {
+        display: none;
+      }
+    }
+
+    .menu-list {
+      position: absolute;
+      z-index: 10;
+      top: 60px;
+      right: 0;
+      background-color: var(--violet-medium);
+      @media screen and (max-width: 900px) {
+        height: calc(100svh - 150px);
+      }
+      width: 90%;
+      max-width: 350px;
+      padding: 50px 30px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+
+      li {
+        width: 100%;
+
+        a {
+          width: 100%;
+          display: block;
+          text-align: end;
+          padding: 5px;
+          font-weight: 600;
+          font-size: 20px;
+        }
+      }
+      .languages {
+        position: absolute;
+        bottom: 20px;
+        right: 0px;
+        a {
+          margin-right: 20px;
+        }
+      }
+    }
+    .desktop-auth {
+      display: none;
+    }
+    .isopen {
+      display: flex;
+    }
+  }
+  @media screen and (min-width: 900px) {
+    .navbar-content {
+      .navbar-functions {
+        margin-left: auto;
+        .btn-signup {
+          display: none;
+        }
+        .menu-btn {
+          display: none;
+        }
+      }
+
+      .menu-list {
+        position: relative;
+        z-index: 5;
+        top: 0;
+        right: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        padding: 0;
+        box-shadow: none;
+        background-color: transparent;
+        width: fit-content;
+        margin-left: 20px;
+        li {
+          position: relative;
+          a {
+            color: black;
+            font-size: 17px;
+            @media screen and (min-width: 1000px) {
+              font-size: 18px;
+            }
+          }
+        }
+      }
+      .desktop-auth {
+        position: relative;
+        display: flex;
+        gap: 10px;
+        margin-left: 20px;
+        .btn-empty {
+          border-bottom-right-radius: 0px;
+          border-top-right-radius: 0px;
+          cursor: pointer;
+        }
+        span {
+          position: absolute;
+          top: calc(50% - 15px);
+          left: calc(50% - 15px);
+          background-color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          font-weight: 600;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          border: 1px solid var(--gray);
+        }
+        .btn-yellow {
+          border-bottom-left-radius: 0px;
+          border-top-left-radius: 0px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
