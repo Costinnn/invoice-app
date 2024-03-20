@@ -1,7 +1,10 @@
 .dashlayout {
   margin-top: 60px;
   position: relative;
-  .page {
-    margin-left: 60px;
+  .dash-page {
+    margin-left: 50px;
+    @media screen and (min-width: 700px) {
+      margin-left: 100px;
+    }
   }
 }

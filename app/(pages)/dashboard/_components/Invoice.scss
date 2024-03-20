@@ -1,0 +1,116 @@
+.invoice {
+  border: 1px solid red;
+  width: 775px;
+  font-family: "Courier New", Courier, monospace;
+  .row1,
+  .row3,
+  .row5 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+  }
+
+  .row1 {
+    .box {
+      ul {
+        .name {
+          font-size: 18px;
+          font-weight: 600;
+          margin-bottom: 5px;
+          width: 200px;
+        }
+        .bank {
+          font-weight: 600;
+          margin-top: 5px;
+        }
+        .contact {
+          margin-top: 5px;
+        }
+      }
+    }
+  }
+
+  .row2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h1 {
+      font-size: 30px;
+      font-weight: 800;
+    }
+  }
+  .row3 {
+    .box:first-of-type {
+      h2 {
+        font-size: 18px;
+        border-bottom: 2px solid gray;
+      }
+      ul {
+        padding-left: 30px;
+      }
+    }
+    .box {
+      ul {
+        margin-top: 10px;
+
+        li {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-weight: 600;
+          margin-top: 3px;
+          span {
+            display: block;
+            margin-left: 10px;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+  .row4 {
+    padding: 0 10px;
+    margin-top: 30px;
+    width: 100%;
+    thead {
+      tr {
+        display: grid;
+        grid-template-columns: 2fr 17fr 2fr 2fr 3fr 2fr 3fr;
+      }
+    }
+    tbody {
+      tr {
+        display: grid;
+        grid-template-areas: none;
+        grid-template-columns: 2fr 17fr 2fr 2fr 3fr 2fr 3fr;
+        td {
+          text-align: center;
+          .info {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  .row5 {
+    text-align: end;
+    .box {
+      ul {
+        li {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          span {
+            display: block;
+            width: 100px;
+          }
+        }
+      }
+    }
+  }
+  .row6,
+  .row7 {
+    padding: 10px;
+  }
+}

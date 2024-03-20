@@ -1,0 +1,278 @@
+.invoice-form {
+  margin: 80px 0 80px 0;
+  .organize-box {
+    .box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+      margin-right: 5px;
+      padding: 20px 10px;
+      border-radius: 7px;
+      label {
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--gray-dark);
+        input,
+        select,
+        textarea {
+          border: 2px solid var(--gray);
+          padding: 5px 10px;
+          border-radius: 7px;
+        }
+      }
+    }
+    .btn-violet {
+      display: block;
+      margin: 30px auto 0 auto;
+    }
+  }
+
+  .container-products {
+    .box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 0 10px;
+      margin-right: 5px;
+      padding: 20px 10px;
+      border-radius: 7px;
+      label {
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--gray-dark);
+        input,
+        select {
+          border: 2px solid var(--gray);
+          padding: 5px 10px;
+          border-radius: 7px;
+        }
+      }
+      .btn-yellow {
+        margin-left: auto;
+        height: 35px;
+        margin-top: auto;
+      }
+    }
+    table {
+      margin-top: 30px;
+      width: 100%;
+      thead {
+        tr {
+          padding: 10px;
+          background-color: var(--gray);
+          border-radius: 7px;
+        }
+        .desk-row {
+          display: none;
+        }
+        .mobile-row {
+          display: block;
+        }
+      }
+
+      @media screen and (max-width: 700px) {
+        tbody {
+          tr {
+            display: grid;
+            grid-template-areas:
+              "idx name name name name value action"
+              "idx qty um price tva value action";
+          }
+          td {
+            //border: 1px solid red;
+          }
+          .idx {
+            grid-area: idx;
+          }
+          .name {
+            grid-area: name;
+          }
+          .qty {
+            grid-area: qty;
+            text-align: center;
+          }
+          .um {
+            grid-area: um;
+            text-align: center;
+          }
+          .price {
+            grid-area: price;
+            text-align: center;
+          }
+          .tva {
+            grid-area: tva;
+            text-align: center;
+          }
+          .value {
+            grid-area: value;
+            text-align: center;
+          }
+          .action {
+            grid-area: action;
+          }
+        }
+      }
+    }
+    .btn-empty {
+      display: block;
+      margin: 20px 10px 0 auto;
+      padding: 5px 15px;
+    }
+  }
+
+  @media screen and (min-width: 450px) {
+    .organize-box {
+      .box {
+        label {
+          flex-direction: row;
+          width: 100%;
+          input,
+          select {
+            margin-left: auto;
+            width: 250px;
+          }
+        }
+        .textarea {
+          flex-direction: column;
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: 700px) {
+    .container-products {
+      .box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        label {
+          display: flex;
+          flex-direction: column;
+          input,
+          select {
+            width: 100%;
+          }
+        }
+      }
+      table {
+        padding: 0 10px;
+        thead {
+          .mobile-row {
+            display: none;
+          }
+          .desk-row {
+            display: grid;
+            grid-template-columns: 1fr 10fr 1fr 1fr 3fr 1fr 4fr 2fr;
+          }
+        }
+        tbody {
+          tr {
+            display: grid;
+            grid-template-areas: none;
+            grid-template-columns: 1fr 10fr 1fr 1fr 3fr 1fr 4fr 2fr;
+            td {
+              text-align: center;
+              .info {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+    .organize-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      .box {
+        label {
+          flex-direction: column;
+          input {
+            width: 100%;
+          }
+        }
+      }
+      .btn-violet {
+        align-self: self-end;
+      }
+    }
+  }
+
+  @media screen and (min-width: 950px) {
+    .container-products {
+      .box {
+        label {
+          display: flex;
+          justify-content: space-between;
+          flex-direction: row;
+          input,
+          select {
+            width: 65%;
+          }
+        }
+      }
+    }
+    .organize-box {
+      .box {
+        label {
+          flex-direction: row;
+          input {
+            width: 65%;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    .container-products {
+      .box {
+        display: flex;
+        flex-direction: row;
+        label {
+          flex-direction: column;
+          width: 17%;
+          input,
+          select {
+            width: 100%;
+          }
+        }
+        .btn-yellow {
+          margin-left: auto;
+        }
+      }
+    }
+    .organize-box {
+      display: flex;
+      flex-direction: column;
+      .box {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .textarea {
+          width: 400px;
+        }
+      }
+    }
+  }
+
+  .bg-1 {
+    background-color: #c4c1eb;
+  }
+  .bg-2 {
+    background-color: #ece9ec;
+  }
+  .bg-3 {
+    background-color: #c1ceeb;
+  }
+  .bg-4 {
+    background-color: #f4f5f5;
+  }
+  .bg-5 {
+    background-color: #f2f7f2;
+  }
+}

@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/pdfmake": "^0.2.9",
     "next": "14.1.2",
+    "pdfmake": "^0.2.10",
     "react": "^18",
     "react-dom": "^18",
     "sass": "^1.71.1"
