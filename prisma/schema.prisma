@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name    String
+  cui     String
+  rc      String
+  address String
+  capital Int
+  iban    String
+  email   String
+
+  clients CompanyClient[]
+}
+
+model CompanyClient {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name    String
+  cui     String
+  rc      String
+  address String
+  iban    String
+  email   String
+
+  seller   Company @relation(fields: [sellerId], references: [id])
+  sellerId String  @db.ObjectId
+}
+
+model Invoice {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  number   Int
+  series   InvoiceSeries?
+  date     DateTime       @default(now())
+  deadline String?
+
+  clientName String
+  clientCui  String
+  currency   String
+
+  issuedByName    String?
+  issuedByCnp     String?
+  accompanyNotice String?
+
+  delegateName String?
+  delegateCnp  String?
+  delegateAuto String?
+
+  mentions String?
+
+  products        InvoiceProduct[]
+  invoiceSeriesId String           @db.ObjectId
+}
+
+model InvoiceSeries {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  lastNumber Int
+  numbers    Int[]
+
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId String  @unique @db.ObjectId
+}
+
+model Product {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  um   String
+
+  invoiceProduct   InvoiceProduct[] @relation(fields: [invoiceProductId], references: [id])
+  invoiceProductId String[]         @db.ObjectId
+}
+
+model InvoiceProduct {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  quantity   Int
+  price      Int
+  tva        Int
+  totalValue Int
+
+  product   Product[] @relation(fields: [productId], references: [id])
+  productId String[]  @db.ObjectId
+
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId String  @db.ObjectId
+}
