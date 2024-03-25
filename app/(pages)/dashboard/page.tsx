@@ -1,11 +1,16 @@
 import Invoice from "./_components/Invoice";
-import Test from "./_components/Test";
+import PdfTest from "./_components/PdfTest";
+import UserTest from "./_components/UserTest";
 
 const page = () => {
+
+ 
+
   return (
     <main className="dash-page">
       dash
-      <Test />
+      <PdfTest />
+      <UserTest/>
       {/* <Invoice/> */}
     </main>
   );

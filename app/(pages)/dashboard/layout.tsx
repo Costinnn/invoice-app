@@ -7,7 +7,7 @@ export default function DashLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="dashlayout">
+    <main className="dashlayout  section-narrow">
       <DashMenu />
       {children}
     </main>

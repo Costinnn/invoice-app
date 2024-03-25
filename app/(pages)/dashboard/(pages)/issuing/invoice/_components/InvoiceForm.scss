@@ -23,6 +23,15 @@
           border-radius: 7px;
         }
       }
+      .selected-option-data {
+        li {
+          display: grid;
+          grid-template-columns: 1fr 3fr;
+          margin-top: 3px;
+          b {
+          }
+        }
+      }
     }
     .btn-violet {
       display: block;
@@ -131,6 +140,7 @@
       .box {
         label {
           flex-direction: row;
+          align-items: center;
           width: 100%;
           input,
           select {
@@ -191,7 +201,8 @@
       .box {
         label {
           flex-direction: column;
-          input {
+          input,
+          select {
             width: 100%;
           }
         }
@@ -220,7 +231,8 @@
       .box {
         label {
           flex-direction: row;
-          input {
+          input,
+          select {
             width: 65%;
           }
         }
@@ -228,51 +240,51 @@
     }
   }
 
-  @media screen and (min-width: 1200px) {
-    .container-products {
-      .box {
-        display: flex;
-        flex-direction: row;
-        label {
-          flex-direction: column;
-          width: 17%;
-          input,
-          select {
-            width: 100%;
-          }
-        }
-        .btn-yellow {
-          margin-left: auto;
-        }
-      }
-    }
-    .organize-box {
-      display: flex;
-      flex-direction: column;
-      .box {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        .textarea {
-          width: 400px;
-        }
-      }
-    }
-  }
+  // @media screen and (min-width: 1200px) {
+  //   .container-products {
+  //     .box {
+  //       display: flex;
+  //       flex-direction: row;
+  //       label {
+  //         flex-direction: column;
+  //         width: 17%;
+  //         input,
+  //         select {
+  //           width: 100%;
+  //         }
+  //       }
+  //       .btn-yellow {
+  //         margin-left: auto;
+  //       }
+  //     }
+  //   }
+  //   .organize-box {
+  //     display: flex;
+  //     flex-direction: column;
+  //     .box {
+  //       display: flex;
+  //       flex-direction: row;
+  //       justify-content: space-between;
+  //       .textarea {
+  //         width: 400px;
+  //       }
+  //     }
+  //   }
+  // }
 
   .bg-1 {
-    background-color: #c4c1eb;
+    background: linear-gradient(to right bottom, #c4c1eb, white);
   }
   .bg-2 {
-    background-color: #ece9ec;
+    background: linear-gradient(to right bottom, #ece9ec, white);
   }
   .bg-3 {
-    background-color: #c1ceeb;
+    background: linear-gradient(to right bottom, #c1ceeb, white);
   }
   .bg-4 {
-    background-color: #f4f5f5;
+    background: linear-gradient(to right bottom, #f4f5f5, white);
   }
   .bg-5 {
-    background-color: #f2f7f2;
+    background: linear-gradient(to right bottom, #f2f7f2, white);
   }
 }

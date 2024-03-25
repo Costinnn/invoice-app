@@ -4,6 +4,15 @@
   top: 60px;
   left: 0;
   height: calc(100dvh - 60px);
+  background: linear-gradient(var(--violet-medium), var(--violet));
+
+  @media screen and (min-width: 900px) {
+    top: 65px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    left: calc(50% - 720px);
+  }
 
   .content {
     display: flex;
@@ -33,16 +42,17 @@
         }
       }
     }
+
     .submenu-issue,
     .submenu-raports,
     .submenu-config {
       height: calc(100dvh - 60px);
-      background-color: var(--violet-medium);
+      background: linear-gradient(var(--violet-medium), var(--violet));
       h4 {
         color: var(--white);
         border-bottom: 1px solid var(--white);
-        background-color: var(--violet);
-        padding: 15px 10px 5px 10px;
+        background: linear-gradient(var(--violet-medium), var(--violet));
+        padding: 13px 10px 5px 10px;
         font-size: 18px;
         width: 100%;
       }

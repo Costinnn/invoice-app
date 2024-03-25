@@ -1,0 +1,52 @@
+.client-modal {
+  position: fixed;
+  z-index: 6;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #723fb117;
+  .modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 85%;
+    max-width: 500px;
+    margin: calc(50vh - 250px) auto;
+    padding: 20px;
+    background-color: white;
+
+    .close-btn {
+      align-self: flex-end;
+      cursor: pointer;
+    }
+    > h3 {
+      margin-top: 10px;
+    }
+    form {
+      width: 100%;
+      margin-top: 10px;
+      label {
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--gray-dark);
+        margin-top: 10px;
+        input {
+          border: 2px solid var(--gray);
+          padding: 5px 10px;
+          border-radius: 7px;
+        }
+      }
+      .feedback {
+        text-align: center;
+        margin-top: 10px;
+        font-weight: 600;
+      }
+      button {
+        margin-top: 30px;
+      }
+    }
+  }
+}

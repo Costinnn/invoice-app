@@ -5,7 +5,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const Test = () => {
+const PdfTest = () => {
   var docDefinition: any = {
     content: [
       // ROW 1
@@ -334,4 +334,4 @@ const Test = () => {
   );
 };
 
-export default Test;
+export default PdfTest;

@@ -54,7 +54,9 @@ const DashMenu = () => {
               type="button"
               onClick={() => toggleSubMenusOpen("issues")}
               style={{
-                backgroundColor: subMenusOpen.issues ? "var(--violet)" : "",
+                background: subMenusOpen.issues
+                  ? "linear-gradient(var(--violet-medium), var(--violet))"
+                  : "",
               }}
             >
               <DashInvoiceSvg color="#F3F8FF" />
@@ -66,7 +68,9 @@ const DashMenu = () => {
               type="button"
               onClick={() => toggleSubMenusOpen("raports")}
               style={{
-                backgroundColor: subMenusOpen.raports ? "var(--violet)" : "",
+                background: subMenusOpen.raports
+                  ? "linear-gradient(var(--violet-medium), var(--violet))"
+                  : "",
               }}
             >
               <DashRaportsSvg color="#F3F8FF" />
@@ -78,7 +82,9 @@ const DashMenu = () => {
               type="button"
               onClick={() => toggleSubMenusOpen("config")}
               style={{
-                backgroundColor: subMenusOpen.config ? "var(--violet)" : "",
+                background: subMenusOpen.config
+                  ? "linear-gradient(var(--violet-medium), var(--violet))"
+                  : "",
               }}
             >
               <DashConfigSvg color="#F3F8FF" />
@@ -101,22 +107,34 @@ const DashMenu = () => {
             <h4>Emitere</h4>
             <ul>
               <li>
-                <Link href={"/dashboard/invoice"} onClick={closeSubMenu}>
+                <Link
+                  href={"/dashboard/issuing/invoice"}
+                  onClick={closeSubMenu}
+                >
                   Factura
                 </Link>
               </li>
               <li>
-                <Link href={"/dashboard/invoice"} onClick={closeSubMenu}>
+                <Link
+                  href={"/dashboard/issuing/invoice"}
+                  onClick={closeSubMenu}
+                >
                   Factura storno
                 </Link>
               </li>
               <li>
-                <Link href={"/dashboard/invoice"} onClick={closeSubMenu}>
+                <Link
+                  href={"/dashboard/issuing/invoice"}
+                  onClick={closeSubMenu}
+                >
                   Bon Fiscal
                 </Link>
               </li>
               <li>
-                <Link href={"/dashboard/invoice"} onClick={closeSubMenu}>
+                <Link
+                  href={"/dashboard/issuing/invoice"}
+                  onClick={closeSubMenu}
+                >
                   Aviz
                 </Link>
               </li>
@@ -130,22 +148,34 @@ const DashMenu = () => {
             <ul>
               <h5>Documente emise</h5>
               <li>
-                <Link href={"/dashboard/invoice"} onClick={closeSubMenu}>
+                <Link
+                  href={"/dashboard/raports/invoice"}
+                  onClick={closeSubMenu}
+                >
                   Facturi
                 </Link>
               </li>
               <li>
-                <Link href={"/dashboard/invoice"} onClick={closeSubMenu}>
+                <Link
+                  href={"/dashboard/raports/invoice"}
+                  onClick={closeSubMenu}
+                >
                   Facturi storno
                 </Link>
               </li>
               <li>
-                <Link href={"/dashboard/invoice"} onClick={closeSubMenu}>
+                <Link
+                  href={"/dashboard/raports/invoice"}
+                  onClick={closeSubMenu}
+                >
                   Bonuri fiscale
                 </Link>
               </li>
               <li>
-                <Link href={"/dashboard/invoice"} onClick={closeSubMenu}>
+                <Link
+                  href={"/dashboard/raports/invoice"}
+                  onClick={closeSubMenu}
+                >
                   Avize
                 </Link>
               </li>
@@ -159,12 +189,12 @@ const DashMenu = () => {
             <ul>
               <h5>Datele firmei</h5>
               <li>
-                <Link href={"/dashboard/invoice"} onClick={closeSubMenu}>
+                <Link href={"/dashboard/config/invoice"} onClick={closeSubMenu}>
                   Generale
                 </Link>
               </li>
               <li>
-                <Link href={"/dashboard/invoice"} onClick={closeSubMenu}>
+                <Link href={"/dashboard/config/invoice"} onClick={closeSubMenu}>
                   Conturi
                 </Link>
               </li>

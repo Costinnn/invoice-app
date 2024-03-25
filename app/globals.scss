@@ -8,7 +8,7 @@
   --black: #080705;
   --gray: #c4c1c0;
   --gray-dark: #28282a;
-  --white: #F3F8FF;
+  --white: #f3f8ff;
 }
 
 * {
@@ -60,19 +60,27 @@ button {
 
 // BUTTONS STYLES
 
-.btn-violet {
-  background-color: var(--violet);
-  color: var(--white);
-  font-weight: 700;
-  padding: 8px 20px;
-  border-radius: 5px;
-}
+.btn-violet,
 .btn-yellow {
-  background-color: var(--yellow);
-  color: var(--white);
-  font-weight: 700;
-  padding: 8px 20px;
+  border: 0;
   border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 5px 15px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: Montserrat, sans-serif;
+  font-size: 0.9em;
+  margin: 5px auto 5px auto;
+  padding: 10px 15px;
+  width: min(90%, 300px);
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.btn-yellow {
+  background: linear-gradient(var(--yellow-medium), var(--yellow));
 }
 
 .btn-empty {
@@ -82,6 +90,11 @@ button {
   font-weight: 700;
   padding: 8px 20px;
   border-radius: 5px;
+}
+
+.btn-violet {
+  background: linear-gradient(var(--violet-medium), var(--violet));
+  display: block;
 }
 
 //  HIDE SCROLLBAR

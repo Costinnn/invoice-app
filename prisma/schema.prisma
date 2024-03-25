@@ -32,10 +32,10 @@ model CompanyClient {
 
   name    String
   cui     String
-  rc      String
+  rc      String?
   address String
-  iban    String
-  email   String
+  iban    String?
+  email   String?
 
   seller   Company @relation(fields: [sellerId], references: [id])
   sellerId String  @db.ObjectId
