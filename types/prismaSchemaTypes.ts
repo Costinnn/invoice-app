@@ -20,3 +20,11 @@ export type CompanyClientType = {
   email?: string;
   sellerId: string;
 };
+
+export type InvoiceSeriesType = {
+  id: string;
+  name: string;
+  lastNumber?: number;
+  numbers?: number[];
+  startingNumber?: number | null;
+};

@@ -1,51 +1,89 @@
 "use client";
 
-import React, { Key, useState } from "react";
+import React, { Key, useCallback, useEffect, useState } from "react";
 
 import CompanyClientModal from "../_modals/CompanyClientModal";
+import InvoiceSeriesModal from "../_modals/InvoiceSeriesModal";
 
-import { CompanyClientType } from "@/types/prismaSchemaTypes";
+import {
+  CompanyClientType,
+  InvoiceSeriesType,
+} from "@/types/prismaSchemaTypes";
 
 import "./InvoiceForm.scss";
 
+const todaysDate = new Date().getDate();
+
 const InvoiceForm = ({
   companyClients,
+  invoiceSeries,
 }: {
   companyClients: [CompanyClientType];
+  invoiceSeries: [InvoiceSeriesType];
 }) => {
+  // Modals
   const [isOpenClientModal, setIsOpenClientModal] = useState<boolean>(false);
-  const [selectedClient, setSelectedClient] =
-    useState<CompanyClientType | null>();
+  const [isOpenSeriesModal, setIsOpenSeriesModal] = useState<boolean>(false);
 
+  //Component state
+  const [selectedClient, setSelectedClient] = useState<
+    CompanyClientType | undefined
+  >();
+  const [selectedInvoiceSerie, setSelectedInvoiceSerie] =
+    useState<InvoiceSeriesType>({ id: "", name: "", startingNumber: 0 });
+  const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState<
+    number | string
+  >("");
+  const [date, setDate] = useState<string>("");
+  const [deadline, setDeadline] = useState<string>("");
+
+  // Handlers
   const handleSelectedClient = (clientId: string) => {
     const clientData = companyClients.filter((item) => item.id === clientId)[0];
     setSelectedClient(clientData);
   };
 
+  const handleSelectedSerie = (seriesId: string) => {
+    if (seriesId !== "newInvoiceSerie") {
+      const invoiceSerieData = invoiceSeries.filter(
+        (item) => item.id === seriesId
+      )[0];
+      setSelectedInvoiceSerie(invoiceSerieData);
+    }
+  };
+
   return (
     <>
+      {/* START MODALS */}
       {isOpenClientModal && (
         <CompanyClientModal setIsOpenClientModal={setIsOpenClientModal} />
       )}
+      {isOpenSeriesModal && (
+        <InvoiceSeriesModal
+          setIsOpenSeriesModal={setIsOpenSeriesModal}
+          setSelectedInvoiceSerie={setSelectedInvoiceSerie}
+          setSelectedInvoiceNumber={setSelectedInvoiceNumber}
+        />
+      )}
+      {/* END MODALS */}
 
       <form className="invoice-form section-narrow">
         <div className="organize-box">
           <div className="box bg-2">
             <label>
               Selecteaza client
-              {companyClients && (
-                <select
-                  required
-                  onChange={(e) => handleSelectedClient(e.target.value)}
-                >
-                  <option value={undefined}>Adauga client</option>
-                  {companyClients.map((item) => (
+              <select
+                required
+                onChange={(e) => handleSelectedClient(e.target.value)}
+              >
+                <option value={undefined}>Adauga client</option>
+                {companyClients &&
+                  companyClients.map((item) => (
                     <option key={item.id as Key} value={item.id}>
                       {item.name}
                     </option>
                   ))}
-                </select>
-              )}
+              </select>
             </label>
             <button
               type="button"
@@ -71,16 +109,63 @@ const InvoiceForm = ({
 
           <div className="box bg-1">
             <label>
-              Serie si numar*
-              <input type="text" required />
+              Serie*
+              <select
+                required
+                onChange={(e) => handleSelectedSerie(e.target.value)}
+                value={selectedInvoiceSerie.id}
+              >
+                <option value={undefined}>Adauga serie</option>
+                {selectedInvoiceSerie.id === "newInvoiceSerie" && (
+                  <option value={selectedInvoiceSerie.id}>
+                    {selectedInvoiceSerie.name}
+                  </option>
+                )}
+                {invoiceSeries &&
+                  invoiceSeries.map((item) => (
+                    <option key={item.id as Key} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+              </select>
             </label>
             <label>
+              Numar*
+              <input
+                type="number"
+                required
+                min={
+                  selectedInvoiceSerie.id === "newInvoiceSerie"
+                    ? Number(selectedInvoiceSerie.startingNumber)
+                    : 0
+                }
+                value={selectedInvoiceNumber}
+                onChange={(e) =>
+                  setSelectedInvoiceNumber(Number(e.target.value))
+                }
+              />
+            </label>
+            <button
+              type="button"
+              className="btn-violet"
+              onClick={() => setIsOpenSeriesModal(true)}
+            >
+              Adauga o serie noua
+            </button>
+            <label>
               Data emiterii*
-              <input type="date" required />
+              <input
+                type="date"
+                required
+                onChange={(e) => setDate(e.target.value)}
+              />
             </label>
             <label>
               Termen de plata
-              <input type="date" />
+              <input
+                type="date"
+                onChange={(e) => setDeadline(e.target.value)}
+              />
             </label>
           </div>
         </div>

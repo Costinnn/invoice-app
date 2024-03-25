@@ -24,6 +24,8 @@ model Company {
   iban    String
   email   String
 
+  invoices Invoice[]
+
   clients CompanyClient[]
 }
 
@@ -63,12 +65,16 @@ model Invoice {
 
   mentions String?
 
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String  @db.ObjectId
+
   products        InvoiceProduct[]
   invoiceSeriesId String           @db.ObjectId
 }
 
 model InvoiceSeries {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   name       String
   lastNumber Int
   numbers    Int[]

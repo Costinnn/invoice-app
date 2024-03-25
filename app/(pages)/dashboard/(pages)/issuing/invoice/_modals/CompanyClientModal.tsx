@@ -6,7 +6,7 @@ import axios from "axios";
 
 import close from "@/public/icons/close.png";
 
-import "./CompanyClientModal.scss";
+import "./ModalStyles.scss";
 
 type ClientModalType = {
   setIsOpenClientModal: Function;
@@ -57,7 +57,7 @@ const CompanyClientModal = ({ setIsOpenClientModal }: ClientModalType) => {
   };
 
   return (
-    <div className="client-modal">
+    <div className="bg-modal">
       <div className="modal">
         <Image
           src={close}
