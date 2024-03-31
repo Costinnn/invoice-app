@@ -1,56 +1,101 @@
 "use client";
 
-import React, { Key, useCallback, useEffect, useState } from "react";
+import React, { Key, useEffect, useState } from "react";
 
 import CompanyClientModal from "../_modals/CompanyClientModal";
 import InvoiceSeriesModal from "../_modals/InvoiceSeriesModal";
 
 import {
   CompanyClientType,
+  InvoiceProductType,
   InvoiceSeriesType,
+  ProductType,
 } from "@/types/prismaSchemaTypes";
 
 import "./InvoiceForm.scss";
+import ProductModal from "../_modals/ProductModal";
 
-const todaysDate = new Date().getDate();
+type InvoiceFormType = {
+  dbCompanyClients: CompanyClientType[];
+  dbInvoiceSeries: InvoiceSeriesType[];
+  dbProducts: ProductType[];
+};
 
 const InvoiceForm = ({
-  companyClients,
-  invoiceSeries,
-}: {
-  companyClients: [CompanyClientType];
-  invoiceSeries: [InvoiceSeriesType];
-}) => {
+  dbCompanyClients,
+  dbInvoiceSeries,
+  dbProducts,
+}: InvoiceFormType) => {
   // Modals
   const [isOpenClientModal, setIsOpenClientModal] = useState<boolean>(false);
   const [isOpenSeriesModal, setIsOpenSeriesModal] = useState<boolean>(false);
+  const [isProductModal, setIsProductModal] = useState<boolean>(false);
 
   //Component state
   const [selectedClient, setSelectedClient] = useState<
     CompanyClientType | undefined
   >();
-  const [selectedInvoiceSerie, setSelectedInvoiceSerie] =
-    useState<InvoiceSeriesType>({ id: "", name: "", startingNumber: 0 });
+  const [selectedInvoiceSerie, setSelectedInvoiceSerie] = useState<
+    InvoiceSeriesType | undefined
+  >({ id: "", name: "", startingNumber: 0 });
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState<
     number | string
   >("");
   const [date, setDate] = useState<string>("");
   const [deadline, setDeadline] = useState<string>("");
+  const [productName, setProductName] = useState<string>("");
+  const [productUm, setProductUm] = useState<string>("");
+  const [productQty, setProductQty] = useState<number | string>("");
+  const [productPrice, setProductPrice] = useState<number | string>("");
+  const [productTva, setProductTva] = useState<number | string>("");
+
+  const [invoiceProducts, setInvoiceProducts] = useState<InvoiceProductType[]>(
+    []
+  );
 
   // Handlers
   const handleSelectedClient = (clientId: string) => {
-    const clientData = companyClients.filter((item) => item.id === clientId)[0];
+    const clientData = dbCompanyClients.filter(
+      (item) => item.id === clientId
+    )[0];
     setSelectedClient(clientData);
   };
 
   const handleSelectedSerie = (seriesId: string) => {
     if (seriesId !== "newInvoiceSerie") {
-      const invoiceSerieData = invoiceSeries.filter(
+      const invoiceSerieData = dbInvoiceSeries.filter(
         (item) => item.id === seriesId
       )[0];
       setSelectedInvoiceSerie(invoiceSerieData);
     }
   };
+
+  const handleAddInvoiceProduct = () => {
+    setInvoiceProducts([
+      ...invoiceProducts,
+      {
+        id: String(Math.random()),
+        name: productName,
+        um: productUm,
+        quantity: Number(productQty),
+        price: Number(productPrice),
+        tva: Number(productTva),
+        totalValue:
+          Number(productQty) * Number(productPrice) +
+          (Number(productTva) / 100) *
+            (Number(productPrice) * Number(productQty)),
+      },
+    ]);
+    setProductName("");
+    setProductUm("");
+    setProductPrice("");
+    setProductQty("");
+    setProductTva("");
+  };
+
+  // Functions
+
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -70,6 +115,7 @@ const InvoiceForm = ({
       <form className="invoice-form section-narrow">
         <div className="organize-box">
           <div className="box bg-2">
+            {/* CLIENT */}
             <label>
               Selecteaza client
               <select
@@ -77,8 +123,8 @@ const InvoiceForm = ({
                 onChange={(e) => handleSelectedClient(e.target.value)}
               >
                 <option value={undefined}>Adauga client</option>
-                {companyClients &&
-                  companyClients.map((item) => (
+                {dbCompanyClients &&
+                  dbCompanyClients.map((item) => (
                     <option key={item.id as Key} value={item.id}>
                       {item.name}
                     </option>
@@ -108,34 +154,37 @@ const InvoiceForm = ({
           </div>
 
           <div className="box bg-1">
+            {/* SERIES */}
             <label>
               Serie*
               <select
                 required
                 onChange={(e) => handleSelectedSerie(e.target.value)}
-                value={selectedInvoiceSerie.id}
+                value={selectedInvoiceSerie?.id}
               >
                 <option value={undefined}>Adauga serie</option>
-                {selectedInvoiceSerie.id === "newInvoiceSerie" && (
+                {selectedInvoiceSerie?.id === "newInvoiceSerie" && (
                   <option value={selectedInvoiceSerie.id}>
                     {selectedInvoiceSerie.name}
                   </option>
                 )}
-                {invoiceSeries &&
-                  invoiceSeries.map((item) => (
+                {dbInvoiceSeries &&
+                  dbInvoiceSeries.map((item: any) => (
                     <option key={item.id as Key} value={item.id}>
                       {item.name}
                     </option>
                   ))}
               </select>
             </label>
+
+            {/* SERIES NUMBER */}
             <label>
               Numar*
               <input
                 type="number"
                 required
                 min={
-                  selectedInvoiceSerie.id === "newInvoiceSerie"
+                  selectedInvoiceSerie?.id === "newInvoiceSerie"
                     ? Number(selectedInvoiceSerie.startingNumber)
                     : 0
                 }
@@ -152,6 +201,8 @@ const InvoiceForm = ({
             >
               Adauga o serie noua
             </button>
+
+            {/* DATE */}
             <label>
               Data emiterii*
               <input
@@ -160,6 +211,8 @@ const InvoiceForm = ({
                 onChange={(e) => setDate(e.target.value)}
               />
             </label>
+
+            {/* DEADLINE */}
             <label>
               Termen de plata
               <input
@@ -171,39 +224,86 @@ const InvoiceForm = ({
         </div>
 
         <div className="container-products">
-          <div className="box bg-3">
+          <div className="box bg-3" id="product-name-box">
+            {/* PRODUCT NAME */}
             <label>
               Denumire produs*
-              <input type="text" required />
+              <input
+                type="text"
+                value={productName}
+                required
+                onChange={(e) => setProductName(e.target.value)}
+                onFocus={() => setIsProductModal(true)}
+                onBlur={() =>
+                  setTimeout(() => {
+                    setIsProductModal(false);
+                  }, 200)
+                }
+              />
             </label>
+            {isProductModal && (
+              <ProductModal
+                setProductName={setProductName}
+                setIsProductModal={setIsProductModal}
+                setProductUm={setProductUm}
+                dbProducts={dbProducts}
+              />
+            )}
+
+            {/* UM */}
             <label>
               UM*
-              <select required>
-                <option value="buc">BUC</option>
-                <option value="kg">KG</option>
-                <option value="ore">ORE</option>
-                <option value="lt">LT</option>
-              </select>
+              <input
+                type="text"
+                value={productUm}
+                required
+                onChange={(e) => setProductUm(e.target.value)}
+              />
             </label>
+
+            {/* Quantity */}
             <label>
               Cantitate*
-              <input type="number" required />
+              <input
+                type="number"
+                required
+                value={productQty}
+                onChange={(e) => setProductQty(Number(e.target.value))}
+              />
             </label>
+
+            {/* PRICE */}
             <label>
               Pret*
-              <input type="number" required />
+              <input
+                type="number"
+                required
+                value={productPrice}
+                onChange={(e) => setProductPrice(Number(e.target.value))}
+              />
             </label>
+
+            {/* TVA */}
             <label>
               TVA*
-              <select required>
+              <select
+                required
+                value={productTva}
+                onChange={(e) => setProductTva(Number(e.target.value))}
+              >
                 <option value="0">0%</option>
                 <option value="5">5%</option>
                 <option value="9">9%</option>
                 <option value="19">19%</option>
               </select>
             </label>
-            <button type="button" className="btn-yellow">
-              Adauga
+
+            <button
+              type="button"
+              className="btn-yellow"
+              onClick={handleAddInvoiceProduct}
+            >
+              Adauga la factura
             </button>
           </div>
           <table>
@@ -223,20 +323,22 @@ const InvoiceForm = ({
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="idx">1</td>
-                <td className="name">Servicii consultanta</td>
-                <td className="qty">5</td>
-                <td className="um">ore</td>
-                <td className="price">
-                  60 <span className="info"> RON</span>
-                </td>
-                <td className="tva">
-                  0%<span className="info"> TVA</span>
-                </td>
-                <td className="value">300</td>
-                <td className="action">action</td>
-              </tr>
+              {invoiceProducts.map((item, idx) => (
+                <tr key={item.id}>
+                  <td className="idx">{idx + 1}</td>
+                  <td className="name">{item.name}</td>
+                  <td className="qty">{item.quantity}</td>
+                  <td className="um">{item.um}</td>
+                  <td className="price">
+                    {item.price} <span className="info"> RON</span>
+                  </td>
+                  <td className="tva">
+                    {item.tva}%<span className="info"> TVA</span>
+                  </td>
+                  <td className="value">{item.totalValue}</td>
+                  <td className="action">action</td>
+                </tr>
+              ))}
             </tbody>
           </table>
           <button type="button" className="btn-empty">

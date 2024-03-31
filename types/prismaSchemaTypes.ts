@@ -28,3 +28,19 @@ export type InvoiceSeriesType = {
   numbers?: number[];
   startingNumber?: number | null;
 };
+
+export type ProductType = {
+  id: string;
+  name: string;
+  um: string;
+};
+
+export type InvoiceProductType = {
+  id: string;
+  name: string;
+  um: string;
+  quantity: number;
+  price: number;
+  tva: number;
+  totalValue: number;
+};

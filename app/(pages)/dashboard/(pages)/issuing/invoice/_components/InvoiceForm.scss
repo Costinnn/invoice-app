@@ -23,6 +23,7 @@
           border-radius: 7px;
         }
       }
+
       .selected-option-data {
         li {
           display: grid;
@@ -62,11 +63,15 @@
           border-radius: 7px;
         }
       }
+
       .btn-yellow {
         margin-left: auto;
         height: 35px;
         margin-top: auto;
       }
+    }
+    #product-name-box {
+      position: relative;
     }
     table {
       margin-top: 30px;
