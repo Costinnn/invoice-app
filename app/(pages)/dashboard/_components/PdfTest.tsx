@@ -328,7 +328,7 @@ const PdfTest = () => {
     <>
       <h1>TEST</h1>
       <button className="btn-violet" onClick={createPdf}>
-        Create
+        Create pdf invoice
       </button>
     </>
   );

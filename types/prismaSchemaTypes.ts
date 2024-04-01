@@ -24,9 +24,8 @@ export type CompanyClientType = {
 export type InvoiceSeriesType = {
   id: string;
   name: string;
-  lastNumber?: number;
-  numbers?: number[];
-  startingNumber?: number | null;
+  lastNumber: number;
+  numbers: number[];
 };
 
 export type ProductType = {

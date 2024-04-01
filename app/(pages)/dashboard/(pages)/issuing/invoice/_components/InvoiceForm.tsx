@@ -28,18 +28,24 @@ const InvoiceForm = ({
   dbInvoiceSeries,
   dbProducts,
 }: InvoiceFormType) => {
-  // Modals
+  // MODALS
   const [isOpenClientModal, setIsOpenClientModal] = useState<boolean>(false);
   const [isOpenSeriesModal, setIsOpenSeriesModal] = useState<boolean>(false);
   const [isProductModal, setIsProductModal] = useState<boolean>(false);
 
-  //Component state
+  // DB STATE
+  const [dbCompanyClientsState, setDbCompanyClientsState] =
+    useState<CompanyClientType[]>(dbCompanyClients);
+  const [dbInvoiceSeriesState, setDbInvoiceSeriesState] =
+    useState<InvoiceSeriesType[]>(dbInvoiceSeries);
+
+  // COMPONENT STATE
   const [selectedClient, setSelectedClient] = useState<
     CompanyClientType | undefined
   >();
   const [selectedInvoiceSerie, setSelectedInvoiceSerie] = useState<
     InvoiceSeriesType | undefined
-  >({ id: "", name: "", startingNumber: 0 });
+  >({ id: "", name: "", lastNumber: 0, numbers: [] });
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState<
     number | string
   >("");
@@ -67,7 +73,7 @@ const InvoiceForm = ({
   const [delegateAuto, setDelegateAuto] = useState<string>("");
   const [mentions, setMentions] = useState<string>("");
 
-  // Handlers
+  // HANDLERS
   const handleSelectedClient = (clientId: string) => {
     const clientData = dbCompanyClients.filter(
       (item) => item.id === clientId
@@ -76,12 +82,11 @@ const InvoiceForm = ({
   };
 
   const handleSelectedSerie = (seriesId: string) => {
-    if (seriesId !== "newInvoiceSerie") {
-      const invoiceSerieData = dbInvoiceSeries.filter(
-        (item) => item.id === seriesId
-      )[0];
-      setSelectedInvoiceSerie(invoiceSerieData);
-    }
+    const invoiceSerieData = dbInvoiceSeries.filter(
+      (item) => item.id === seriesId
+    )[0];
+    setSelectedInvoiceSerie(invoiceSerieData);
+    setSelectedInvoiceNumber(invoiceSerieData.lastNumber! + 1);
   };
 
   const handleAddInvoiceProduct = () => {
@@ -124,7 +129,7 @@ const InvoiceForm = ({
     setInvoiceProducts((prev) => prev.filter((item) => item.id !== itemId));
   };
 
-  // Functions
+  // FUNCTIONS
   useEffect(() => {
     setInvoiceSubtotal(0);
     setInvoiceTvaValue(0);
@@ -145,17 +150,22 @@ const InvoiceForm = ({
           (itemTva - itemTva * (invoiceAppliedDiscount / 100))
       );
     });
-  }, [invoiceProducts,invoiceAppliedDiscount]);
+  }, [invoiceProducts, invoiceAppliedDiscount]);
 
   return (
     <>
       {/* START MODALS */}
       {isOpenClientModal && (
-        <CompanyClientModal setIsOpenClientModal={setIsOpenClientModal} />
+        <CompanyClientModal
+          setIsOpenClientModal={setIsOpenClientModal}
+          setSelectedClient={setSelectedClient}
+          setDbCompanyClientsState={setDbCompanyClientsState}
+        />
       )}
       {isOpenSeriesModal && (
         <InvoiceSeriesModal
           setIsOpenSeriesModal={setIsOpenSeriesModal}
+          setDbInvoiceSeriesState={setDbInvoiceSeriesState}
           setSelectedInvoiceSerie={setSelectedInvoiceSerie}
           setSelectedInvoiceNumber={setSelectedInvoiceNumber}
         />
@@ -171,10 +181,11 @@ const InvoiceForm = ({
               <select
                 required
                 onChange={(e) => handleSelectedClient(e.target.value)}
+                value={selectedClient?.id}
               >
                 <option value={undefined}>Adauga client</option>
-                {dbCompanyClients &&
-                  dbCompanyClients.map((item) => (
+                {dbCompanyClientsState.length > 0 &&
+                  dbCompanyClientsState.map((item) => (
                     <option key={item.id as Key} value={item.id}>
                       {item.name}
                     </option>
@@ -213,13 +224,8 @@ const InvoiceForm = ({
                 value={selectedInvoiceSerie?.id}
               >
                 <option value={undefined}>Adauga serie</option>
-                {selectedInvoiceSerie?.id === "newInvoiceSerie" && (
-                  <option value={selectedInvoiceSerie.id}>
-                    {selectedInvoiceSerie.name}
-                  </option>
-                )}
-                {dbInvoiceSeries &&
-                  dbInvoiceSeries.map((item: any) => (
+                {dbInvoiceSeriesState.length > 0 &&
+                  dbInvoiceSeriesState.map((item: any) => (
                     <option key={item.id as Key} value={item.id}>
                       {item.name}
                     </option>
@@ -233,11 +239,7 @@ const InvoiceForm = ({
               <input
                 type="number"
                 required
-                min={
-                  selectedInvoiceSerie?.id === "newInvoiceSerie"
-                    ? Number(selectedInvoiceSerie.startingNumber)
-                    : 0
-                }
+                min={selectedInvoiceSerie?.lastNumber}
                 value={selectedInvoiceNumber}
                 onChange={(e) =>
                   setSelectedInvoiceNumber(Number(e.target.value))
@@ -392,14 +394,14 @@ const InvoiceForm = ({
                     <td className="value">{item.totalValue}</td>
                     <td className="action">
                       <button type="button">
-                        <UpdateSvg color="blue"/>
+                        <UpdateSvg color="blue" />
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleDeleteInvoiceItem(item.id)}
                       >
-                        <DeleteSvg color="red"/>
+                        <DeleteSvg color="red" />
                       </button>
                     </td>
                   </tr>

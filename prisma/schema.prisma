@@ -25,8 +25,8 @@ model Company {
   email   String
 
   invoices Invoice[]
-
-  clients CompanyClient[]
+  clients  CompanyClient[]
+  series   InvoiceSeries[]
 }
 
 model CompanyClient {
@@ -46,9 +46,9 @@ model CompanyClient {
 model Invoice {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  number   Int
-  series   InvoiceSeries?
-  date     DateTime       @default(now())
+  number Int
+
+  date     DateTime @default(now())
   deadline String?
 
   clientName String
@@ -68,8 +68,10 @@ model Invoice {
   company   Company @relation(fields: [companyId], references: [id])
   companyId String  @db.ObjectId
 
-  products        InvoiceProduct[]
-  invoiceSeriesId String           @db.ObjectId
+  products InvoiceProduct[]
+
+  serie           InvoiceSeries @relation(fields: [invoiceSeriesId], references: [id])
+  invoiceSeriesId String        @db.ObjectId
 }
 
 model InvoiceSeries {
@@ -79,8 +81,10 @@ model InvoiceSeries {
   lastNumber Int
   numbers    Int[]
 
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
-  invoiceId String  @unique @db.ObjectId
+  invoices  Invoice[]
+  
+  company   Company   @relation(fields: [companyId], references: [id])
+  companyId String    @db.ObjectId
 }
 
 model Product {

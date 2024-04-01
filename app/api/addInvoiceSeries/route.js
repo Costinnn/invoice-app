@@ -1,33 +1,34 @@
 import { prisma } from "@/lib/prismaDbClient";
 import { NextResponse } from "next/server";
 
-const sellerIdData = "65fbd41cdccb0b09a7eca9d0";
+const companyIdData = "65fbd41cdccb0b09a7eca9d0";
 
 export async function POST(request) {
   try {
     const reqData = await request.json();
 
-    const newClientCompany = await prisma.companyClient.create({
+    const newInvoiceSeries = await prisma.invoiceSeries.create({
       data: {
         ...reqData,
-        seller: { connect: { id: sellerIdData } },
+        numbers: [],
+        company: { connect: { id: companyIdData } },
       },
     });
 
-    if (newClientCompany) {
+    if (newInvoiceSeries) {
       return NextResponse.json(
-        { message: "Success", dbData: newClientCompany },
+        { message: "Success", dbData: newInvoiceSeries },
         { status: 201 }
       );
     }
 
     return NextResponse.json(
-      { error: "Could not add company client!" },
+      { error: "Could not add invoice serie!" },
       { status: 500 }
     );
   } catch (err) {
     return NextResponse.json(
-      { error: `ADD_COMPANY_CLIENT_API_ERROR ${err}` },
+      { error: `INVOICE_SERIE_API_ERROR ${err}` },
       { status: 500 }
     );
   }

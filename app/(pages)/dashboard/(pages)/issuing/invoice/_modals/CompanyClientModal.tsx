@@ -7,12 +7,19 @@ import axios from "axios";
 import close from "@/public/icons/close.png";
 
 import "./ModalStyles.scss";
+import { CompanyClientType } from "@/types/prismaSchemaTypes";
 
 type ClientModalType = {
   setIsOpenClientModal: Function;
+  setDbCompanyClientsState: Function;
+  setSelectedClient: Function;
 };
 
-const CompanyClientModal = ({ setIsOpenClientModal }: ClientModalType) => {
+const CompanyClientModal = ({
+  setIsOpenClientModal,
+  setDbCompanyClientsState,
+  setSelectedClient,
+}: ClientModalType) => {
   const [newClientName, setNewClientName] = useState<string>("");
   const [newClientCui, setNewClientCui] = useState<string>("");
   const [newClientAddress, setNewClientAddress] = useState<string>("");
@@ -36,15 +43,25 @@ const CompanyClientModal = ({ setIsOpenClientModal }: ClientModalType) => {
     try {
       const res = await axios.post("/api/addCompanyClient", newClient);
 
-      console.log(res);
-
       if (res.status === 201) {
-        setFeedback("Client creat cu succes!");
+        const newDbClient = {
+          id: res.data.dbData.id,
+          name: res.data.dbData.name,
+          cui: res.data.dbData.cui,
+          rc: res.data.dbData.rc,
+          address: res.data.dbData.address,
+          iban: res.data.dbData.iban,
+          email: res.data.dbData.email,
+          sellerId: res.data.dbData.sellerId,
+        };
 
-        setTimeout(() => {
-          setFeedback("");
-          setIsOpenClientModal(false);
-        }, 3000);
+        setDbCompanyClientsState((prev: CompanyClientType[]) => [
+          ...prev,
+          newDbClient,
+        ]);
+        setSelectedClient(newDbClient);
+
+        setIsOpenClientModal(false);
       } else {
         setFeedback("A intervenit o eroare!");
         setTimeout(() => {
