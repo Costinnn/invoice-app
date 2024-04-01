@@ -1,9 +1,7 @@
 import React from "react";
 
-type SvgType = {
-  color?: string;
-  size?: number;
-};
+import { SvgType } from "@/types/SvgType";
+
 const MoneySvg = ({ color, size }: SvgType) => {
   return (
     <svg
