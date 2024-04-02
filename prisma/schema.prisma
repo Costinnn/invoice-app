@@ -24,9 +24,11 @@ model Company {
   iban    String
   email   String
 
-  invoices Invoice[]
-  clients  CompanyClient[]
-  series   InvoiceSeries[]
+  invoices        Invoice[]
+  clients         CompanyClient[]
+  series          InvoiceSeries[]
+  products        Product[]
+  invoiceProducts InvoiceProduct[]
 }
 
 model CompanyClient {
@@ -48,7 +50,7 @@ model Invoice {
 
   number Int
 
-  date     DateTime @default(now())
+  date     String
   deadline String?
 
   clientName String
@@ -65,10 +67,16 @@ model Invoice {
 
   mentions String?
 
+  subtotal Int
+  discount Int
+  tva      Int
+  total    Int
+
   company   Company @relation(fields: [companyId], references: [id])
   companyId String  @db.ObjectId
 
-  products InvoiceProduct[]
+  invoiceProducts   InvoiceProduct[] @relation(fields: [invoiceProductsId], references: [id])
+  invoiceProductsId String[]         @db.ObjectId
 
   serie           InvoiceSeries @relation(fields: [invoiceSeriesId], references: [id])
   invoiceSeriesId String        @db.ObjectId
@@ -81,10 +89,10 @@ model InvoiceSeries {
   lastNumber Int
   numbers    Int[]
 
-  invoices  Invoice[]
-  
-  company   Company   @relation(fields: [companyId], references: [id])
-  companyId String    @db.ObjectId
+  invoices Invoice[]
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String  @db.ObjectId
 }
 
 model Product {
@@ -92,8 +100,10 @@ model Product {
   name String
   um   String
 
-  invoiceProduct   InvoiceProduct[] @relation(fields: [invoiceProductId], references: [id])
-  invoiceProductId String[]         @db.ObjectId
+  invoiceProducts InvoiceProduct[]
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String  @db.ObjectId
 }
 
 model InvoiceProduct {
@@ -104,9 +114,12 @@ model InvoiceProduct {
   tva        Int
   totalValue Int
 
-  product   Product[] @relation(fields: [productId], references: [id])
-  productId String[]  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.ObjectId
 
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
-  invoiceId String  @db.ObjectId
+  invoice   Invoice[] @relation(fields: [invoiceId], references: [id])
+  invoiceId String[]  @db.ObjectId
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String  @db.ObjectId
 }

@@ -41,7 +41,7 @@ const InvoiceSeriesModal = ({
           const newDbSeries = {
             id: res.data.dbData.id,
             name: res.data.dbData.name,
-            lastNumber: res.data.dbData.lastNumber + 1,
+            lastNumber: res.data.dbData.lastNumber ,
             numbers: res.data.dbData.numbers,
           };
 

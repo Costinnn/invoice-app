@@ -34,6 +34,11 @@ export type ProductType = {
   um: string;
 };
 
+export type ProductStateType = {
+  id: string;
+  name: string;
+};
+
 export type InvoiceProductType = {
   id: string;
   name: string;

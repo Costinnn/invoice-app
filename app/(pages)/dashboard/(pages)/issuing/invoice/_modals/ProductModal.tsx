@@ -2,27 +2,34 @@ import { ProductType } from "@/types/prismaSchemaTypes";
 import React from "react";
 
 type ProductModalType = {
-  setProductName: Function;
+  setProductNameId: Function;
   setIsProductModal: Function;
   setProductUm: Function;
-  dbProducts: ProductType[];
+  dbProductsState: ProductType[];
 };
 
 const ProductModal = ({
-  setProductName,
+  setProductNameId,
   setIsProductModal,
   setProductUm,
-  dbProducts,
+  dbProductsState,
 }: ProductModalType) => {
-  const handleClick = (newProductName: string, newProductUm: string) => {
-    setProductName(newProductName);
+  const handleClick = (
+    newProductId: string,
+    newProductName: string,
+    newProductUm: string
+  ) => {
+    setProductNameId({ id: newProductId, name: newProductName });
     setProductUm(newProductUm);
     setIsProductModal(false);
   };
   return (
     <ul className="product-modal">
-      {dbProducts.map((item) => (
-        <li key={item.id} onClick={() => handleClick(item.name, item.um)}>
+      {dbProductsState.map((item) => (
+        <li
+          key={item.id}
+          onClick={() => handleClick(item.id, item.name, item.um)}
+        >
           {item.name}
         </li>
       ))}

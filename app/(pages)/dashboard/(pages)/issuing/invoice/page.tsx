@@ -2,6 +2,7 @@ import React from "react";
 
 import { getCompanyClients } from "@/lib/invoiceData/getCompanyClients";
 import { getInvoiceSeries } from "@/lib/invoiceData/getInvoiceSeries";
+import { getProducts } from "@/lib/invoiceData/getProducts";
 
 import {
   CompanyClientType,
@@ -13,13 +14,8 @@ import InvoiceForm from "./_components/InvoiceForm";
 
 const page = async () => {
   const dbCompanyClients: CompanyClientType[] = await getCompanyClients();
-
   const dbInvoiceSeries: InvoiceSeriesType[] = await getInvoiceSeries();
-
-  const dbProducts: ProductType[] = [
-    { id: "1", name: "prod1", um: "BUC" },
-    { id: "2", name: "prod2", um: "KG" },
-  ];
+  const dbProducts: ProductType[] = await getProducts();
 
   return (
     <section className="dash-page">

@@ -1,21 +1,23 @@
 "use client";
 
 import React, { Key, useEffect, useState } from "react";
+import axios from "axios";
 
 import CompanyClientModal from "../_modals/CompanyClientModal";
 import InvoiceSeriesModal from "../_modals/InvoiceSeriesModal";
+import ProductModal from "../_modals/ProductModal";
+import UpdateSvg from "@/components/svg/UpdateSvg";
+import DeleteSvg from "@/components/svg/DeleteSvg";
 
 import {
   CompanyClientType,
   InvoiceProductType,
   InvoiceSeriesType,
   ProductType,
+  ProductStateType,
 } from "@/types/prismaSchemaTypes";
 
 import "./InvoiceForm.scss";
-import ProductModal from "../_modals/ProductModal";
-import UpdateSvg from "@/components/svg/UpdateSvg";
-import DeleteSvg from "@/components/svg/DeleteSvg";
 
 type InvoiceFormType = {
   dbCompanyClients: CompanyClientType[];
@@ -38,6 +40,8 @@ const InvoiceForm = ({
     useState<CompanyClientType[]>(dbCompanyClients);
   const [dbInvoiceSeriesState, setDbInvoiceSeriesState] =
     useState<InvoiceSeriesType[]>(dbInvoiceSeries);
+  const [dbProductsState, setDbProductsState] =
+    useState<ProductType[]>(dbProducts);
 
   // COMPONENT STATE
   const [selectedClient, setSelectedClient] = useState<
@@ -51,20 +55,6 @@ const InvoiceForm = ({
   >("");
   const [date, setDate] = useState<string>("");
   const [deadline, setDeadline] = useState<string>("");
-  const [productName, setProductName] = useState<string>("");
-  const [productUm, setProductUm] = useState<string>("");
-  const [productQty, setProductQty] = useState<number | string>("");
-  const [productPrice, setProductPrice] = useState<number | string>("");
-  const [productTva, setProductTva] = useState<number | string>("");
-  const [invoiceProducts, setInvoiceProducts] = useState<InvoiceProductType[]>(
-    []
-  );
-  const [invoiceDiscount, setInvoiceDiscount] = useState<number>(0);
-  const [invoiceAppliedDiscount, setInvoiceAppliedDiscount] =
-    useState<number>(0);
-  const [invoiceTvaValue, setInvoiceTvaValue] = useState<number>(0);
-  const [invoiceSubtotal, setInvoiceSubtotal] = useState<number>(0);
-  const [invoiceTotal, setInvoiceTotal] = useState<number>(0);
   const [issuedByName, setIssuedByName] = useState<string>("");
   const [issuedByCnp, setIssuedByCnp] = useState<string>("");
   const [accompanyNotice, setAccompanyNotice] = useState<string>("");
@@ -72,6 +62,25 @@ const InvoiceForm = ({
   const [delegateCnp, setDelegateCnp] = useState<string>("");
   const [delegateAuto, setDelegateAuto] = useState<string>("");
   const [mentions, setMentions] = useState<string>("");
+
+  const [invoiceDiscount, setInvoiceDiscount] = useState<number>(0);
+  const [invoiceAppliedDiscount, setInvoiceAppliedDiscount] =
+    useState<number>(0);
+  const [invoiceTvaValue, setInvoiceTvaValue] = useState<number>(0);
+  const [invoiceSubtotal, setInvoiceSubtotal] = useState<number>(0);
+  const [invoiceTotal, setInvoiceTotal] = useState<number>(0);
+
+  const [productNameId, setProductNameId] = useState<ProductStateType>({
+    id: "",
+    name: "",
+  });
+  const [productUm, setProductUm] = useState<string>("");
+  const [productQty, setProductQty] = useState<number | string>("");
+  const [productPrice, setProductPrice] = useState<number | string>("");
+  const [productTva, setProductTva] = useState<number | string>("");
+  const [invoiceProducts, setInvoiceProducts] = useState<InvoiceProductType[]>(
+    []
+  );
 
   // HANDLERS
   const handleSelectedClient = (clientId: string) => {
@@ -89,25 +98,65 @@ const InvoiceForm = ({
     setSelectedInvoiceNumber(invoiceSerieData.lastNumber! + 1);
   };
 
-  const handleAddInvoiceProduct = () => {
+  const handleTypedProduct = (newNameValue: string) => {
+    setProductNameId({ id: "new", name: newNameValue });
+  };
+
+  const handleAddInvoiceProduct = async () => {
     const totalValueOfAddedProduct =
       Number(productQty) * Number(productPrice) +
       Number(productQty) * Number(productPrice) * (Number(productTva) / 100);
 
-    setInvoiceProducts([
-      ...invoiceProducts,
-      {
-        id: String(Math.random()),
-        name: productName,
-        um: productUm,
-        quantity: Number(productQty),
-        price: Number(productPrice),
-        tva: Number(productTva),
-        totalValue: totalValueOfAddedProduct,
-      },
-    ]);
+    if (productNameId.id === "new") {
+      const newDbProduct = { name: productNameId.name, um: productUm };
 
-    setProductName("");
+      try {
+        const res = await axios.post("/api/addProduct", newDbProduct);
+
+        if (res.status === 201) {
+          setInvoiceProducts([
+            ...invoiceProducts,
+            {
+              id: res.data.dbData.id,
+              name: res.data.dbData.name,
+              um: res.data.dbData.um,
+              quantity: Number(productQty),
+              price: Number(productPrice),
+              tva: Number(productTva),
+              totalValue: totalValueOfAddedProduct,
+            },
+          ]);
+          setDbProductsState((prev) => [
+            ...prev,
+            {
+              id: res.data.dbData.id,
+              name: res.data.dbData.name,
+              um: res.data.dbData.um,
+            },
+          ]);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setInvoiceProducts([
+        ...invoiceProducts,
+        {
+          id: productNameId.id,
+          name: productNameId.name,
+          um: productUm,
+          quantity: Number(productQty),
+          price: Number(productPrice),
+          tva: Number(productTva),
+          totalValue: totalValueOfAddedProduct,
+        },
+      ]);
+    }
+
+    setProductNameId({
+      id: "",
+      name: "",
+    });
     setProductUm("");
     setProductPrice("");
     setProductQty("");
@@ -127,6 +176,46 @@ const InvoiceForm = ({
 
   const handleDeleteInvoiceItem = (itemId: string) => {
     setInvoiceProducts((prev) => prev.filter((item) => item.id !== itemId));
+  };
+
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    const newInvoice = {
+      clientName: selectedClient?.name,
+      clientCui: selectedClient?.cui,
+      invoiceSeriesId: selectedInvoiceSerie?.id,
+      number: selectedInvoiceNumber,
+      date: date,
+      deadline: deadline,
+      products: invoiceProducts,
+      issuedByName: issuedByName,
+      issuedByCnp: issuedByCnp,
+      accompanyNotice: accompanyNotice,
+      delegateName: delegateName,
+      delegateCnp: delegateCnp,
+      delegateAuto: delegateAuto,
+      mentions: mentions,
+      currency: "RON",
+      subtotal: invoiceSubtotal,
+      discount: invoiceAppliedDiscount,
+      tva: invoiceTvaValue,
+      total: invoiceTotal,
+    };
+
+    try {
+      const res = await axios.post("/api/addInvoice", newInvoice);
+
+      if (res.status === 201) {
+        console.log("SUCCESS", { res });
+      } else {
+        console.log({res});
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // FUNCTIONS
@@ -283,9 +372,9 @@ const InvoiceForm = ({
               Denumire produs*
               <input
                 type="text"
-                value={productName}
+                value={productNameId.name}
                 required
-                onChange={(e) => setProductName(e.target.value)}
+                onChange={(e) => handleTypedProduct(e.target.value)}
                 onFocus={() => setIsProductModal(true)}
                 onBlur={() =>
                   setTimeout(() => {
@@ -294,12 +383,12 @@ const InvoiceForm = ({
                 }
               />
             </label>
-            {isProductModal && (
+            {isProductModal && dbProducts.length > 0 && (
               <ProductModal
-                setProductName={setProductName}
+                setProductNameId={setProductNameId}
                 setIsProductModal={setIsProductModal}
                 setProductUm={setProductUm}
-                dbProducts={dbProducts}
+                dbProductsState={dbProductsState}
               />
             )}
 
@@ -380,7 +469,7 @@ const InvoiceForm = ({
             <tbody>
               {invoiceProducts.length > 0 &&
                 invoiceProducts.map((item, idx) => (
-                  <tr key={item.id}>
+                  <tr key={item.id + idx}>
                     <td className="idx">{idx + 1}</td>
                     <td className="name">{item.name}</td>
                     <td className="qty">{item.quantity}</td>
@@ -517,7 +606,11 @@ const InvoiceForm = ({
               ></textarea>
             </label>
           </div>
-          <button type="button" className="btn-violet">
+          <button
+            type="button"
+            className="btn-violet"
+            onClick={(e) => handleSubmit(e)}
+          >
             Salveaza factura
           </button>
         </div>
