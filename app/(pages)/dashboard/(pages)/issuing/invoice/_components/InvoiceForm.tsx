@@ -186,7 +186,12 @@ const InvoiceForm = ({
     const newInvoice = {
       clientName: selectedClient?.name,
       clientCui: selectedClient?.cui,
+      clientAddress: selectedClient?.address,
+      clientRc: selectedClient?.rc,
+      clientIban: selectedClient?.iban,
+      clientEmail: selectedClient?.email,
       invoiceSeriesId: selectedInvoiceSerie?.id,
+      invoiceSerie: selectedInvoiceSerie?.name,
       number: selectedInvoiceNumber,
       date: date,
       deadline: deadline,
@@ -211,7 +216,7 @@ const InvoiceForm = ({
       if (res.status === 201) {
         console.log("SUCCESS", { res });
       } else {
-        console.log({res});
+        console.log({ res });
       }
     } catch (err) {
       console.log(err);
@@ -240,6 +245,10 @@ const InvoiceForm = ({
       );
     });
   }, [invoiceProducts, invoiceAppliedDiscount]);
+
+  useEffect(() => {
+    console.log(selectedClient);
+  }, [selectedClient]);
 
   return (
     <>

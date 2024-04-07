@@ -53,9 +53,13 @@ model Invoice {
   date     String
   deadline String?
 
-  clientName String
-  clientCui  String
-  currency   String
+  clientName    String
+  clientCui     String
+  clientAddress String
+  clientRc      String?
+  clientIban    String?
+  clientEmail   String?
+  currency      String
 
   issuedByName    String?
   issuedByCnp     String?
@@ -80,6 +84,7 @@ model Invoice {
 
   serie           InvoiceSeries @relation(fields: [invoiceSeriesId], references: [id])
   invoiceSeriesId String        @db.ObjectId
+  invoiceSerie    String
 }
 
 model InvoiceSeries {
@@ -107,8 +112,10 @@ model Product {
 }
 
 model InvoiceProduct {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  
+  name       String
+  um         String
   quantity   Int
   price      Int
   tva        Int

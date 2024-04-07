@@ -1,0 +1,54 @@
+.invoice-component {
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 5px 15px;
+  padding: 10px;
+
+  .info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .img-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        text-wrap: nowrap;
+        margin-top: 5px;
+      }
+    }
+
+    .text {
+      width: 100%;
+
+      .row1,
+      .row3 {
+        display: flex;
+        justify-content: space-between;
+      }
+      .row2 {
+        display: block;
+      }
+      .row2,
+      .row3 {
+        margin-top: 5px;
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    .btn-violet,
+    .btn-yellow {
+      padding: 5px 10px;
+      width: 100%;
+    }
+  }
+}

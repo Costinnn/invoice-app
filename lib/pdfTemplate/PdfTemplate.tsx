@@ -1,12 +1,86 @@
-"use client";
+import { getInvoiceProducts } from "@/lib/invoiceData/getInvoiceProducts";
 
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import { DbInvoiceType } from "@/types/prismaSchemaTypes";
+import { InvoiceProductType } from "@/types/prismaSchemaTypes";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+const PdfTemplate = (
+  invoiceData: DbInvoiceType,
+  invoiceProducts: InvoiceProductType[]
+) => {
+  const {
+    clientName,
+    clientCui,
+    clientAddress,
+    clientRc,
+    clientIban,
+    clientEmail,
+    invoiceSeriesId,
+    invoiceSerie,
+    number,
+    date,
+    deadline,
+    issuedByName,
+    issuedByCnp,
+    accompanyNotice,
+    delegateName,
+    delegateCnp,
+    delegateAuto,
+    mentions,
+    currency,
+    subtotal,
+    discount,
+    tva,
+    total,
+  } = invoiceData;
 
-const PdfTest = () => {
-  var docDefinition: any = {
+  const createDataTable = (data: InvoiceProductType[]) => {
+    const tableDisplayColumns = [];
+    let idx = 1;
+    for (const item of data) {
+      tableDisplayColumns.push([
+        {
+          text: idx,
+          alignment: "center",
+          fontSize: 11,
+        },
+        {
+          text: item.name,
+          alignment: "center",
+          fontSize: 11,
+        },
+        {
+          text: item.quantity,
+          alignment: "center",
+          fontSize: 11,
+        },
+        {
+          text: item.um,
+          alignment: "center",
+          fontSize: 11,
+        },
+        {
+          text: item.price,
+          alignment: "center",
+          fontSize: 11,
+        },
+        {
+          text: `${item.tva}%`,
+          alignment: "center",
+          fontSize: 11,
+        },
+        {
+          text: item.totalValue.toLocaleString(),
+          alignment: "center",
+        },
+      ]);
+      idx++;
+    }
+    return tableDisplayColumns;
+  };
+
+  const productsTableDisplay = createDataTable(invoiceProducts);
+
+  const docDefinition: any = {
     content: [
       // ROW 1
       {
@@ -97,23 +171,23 @@ const PdfTest = () => {
                   width: "*",
                   stack: [
                     {
-                      text: `xxxx xxxxxx SRL`,
+                      text: clientName,
                       margin: [20, 3, 0, 0],
                     },
                     {
-                      text: `RO 31313432`,
+                      text: clientCui,
                       margin: [20, 3, 0, 0],
                     },
                     {
-                      text: `Iasi, sat. Bogonos`,
+                      text: clientAddress,
                       margin: [20, 3, 0, 0],
                     },
                     {
-                      text: `xxxx.xxxx@gmail.com`,
+                      text: clientEmail ? clientEmail : " - ",
                       margin: [20, 3, 0, 0],
                     },
                     {
-                      text: `RO33 INGB 0000 9999 3333 3333`,
+                      text: clientIban ? clientIban : " - ",
                       margin: [20, 5, 0, 0],
                     },
                   ],
@@ -140,10 +214,10 @@ const PdfTest = () => {
                 alignment: "center",
                 width: 100,
                 stack: [
-                  { text: `2`, margin: [0, 3, 0, 0] },
-                  { text: `WEB`, margin: [0, 3, 0, 0] },
-                  { text: `22.2.2024`, margin: [0, 3, 0, 0] },
-                  { text: `-`, margin: [0, 10, 0, 0] },
+                  { text: number, margin: [0, 3, 0, 0] },
+                  { text: invoiceSerie, margin: [0, 3, 0, 0] },
+                  { text: date, margin: [0, 3, 0, 0] },
+                  { text: deadline ? deadline : " - ", margin: [0, 10, 0, 0] },
                 ],
               },
             ],
@@ -203,36 +277,7 @@ const PdfTest = () => {
               },
             ],
             // table Content
-            [
-              {
-                text: "1",
-                alignment: "center",
-              },
-              {
-                text: "Dezvoltare website de prezentare",
-                alignment: "center",
-              },
-              {
-                text: "1",
-                alignment: "center",
-              },
-              {
-                text: "buc",
-                alignment: "center",
-              },
-              {
-                text: "500",
-                alignment: "center",
-              },
-              {
-                text: "0%",
-                alignment: "center",
-              },
-              {
-                text: "500",
-                alignment: "center",
-              },
-            ],
+            ...productsTableDisplay,
           ],
         },
         layout: {
@@ -264,9 +309,10 @@ const PdfTest = () => {
                 alignment: "right",
                 stack: [
                   { text: `SUBTOTAL`, bold: true, margin: [0, 3, 0, 0] },
+                  { text: `TVA`, bold: true, margin: [0, 3, 0, 0] },
                   { text: `DISCOUNT`, bold: true, margin: [0, 3, 0, 0] },
                   {
-                    text: `TOTAL DE PLATA (lei)`,
+                    text: `TOTAL DE PLATA (${currency})`,
                     bold: true,
                     margin: [0, 3, 0, 0],
                   },
@@ -275,9 +321,13 @@ const PdfTest = () => {
               {
                 alignment: "right",
                 stack: [
-                  { text: `1.500`, margin: [0, 3, 0, 0] },
-                  { text: `0`, margin: [0, 3, 0, 0] },
-                  { text: `1.500`, margin: [0, 3, 0, 0] },
+                  { text: subtotal.toLocaleString(), margin: [0, 3, 0, 0] },
+                  { text: tva.toLocaleString(), margin: [0, 3, 0, 0] },
+                  {
+                    text: `${discount.toLocaleString()} %`,
+                    margin: [0, 3, 0, 0],
+                  },
+                  { text: total.toLocaleString(), margin: [0, 3, 0, 0] },
                 ],
               },
             ],
@@ -319,19 +369,7 @@ const PdfTest = () => {
     styles: {},
   };
 
-  const createPdf = () => {
-    const generatedPdf = pdfMake.createPdf(docDefinition);
-    generatedPdf.open();
-  };
-
-  return (
-    <>
-      <h1>TEST</h1>
-      <button className="btn-violet" onClick={createPdf}>
-        Create pdf invoice
-      </button>
-    </>
-  );
+  return docDefinition;
 };
 
-export default PdfTest;
+export default PdfTemplate;

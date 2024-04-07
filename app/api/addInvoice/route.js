@@ -9,9 +9,12 @@ export async function POST(request) {
 
     // CREATE INVOICE PRODUCTS
     const newDbInvoiceProducts = [];
+
     for (let item of reqData.products) {
       const newInvoiceProduct = await prisma.invoiceProduct.create({
         data: {
+          name: item.name,
+          um: item.um,
           quantity: item.quantity,
           price: item.price,
           tva: item.tva,
@@ -36,7 +39,12 @@ export async function POST(request) {
       data: {
         clientName: reqData.clientName,
         clientCui: reqData.clientCui,
+        clientAddress: reqData.clientAddress,
+        clientRc: reqData.clientRc,
+        clientIban: reqData.clientIban,
+        clientEmail: reqData.clientEmail,
         serie: { connect: { id: reqData.invoiceSeriesId } },
+        invoiceSerie: reqData.invoiceSerie,
         number: reqData.number,
         date: reqData.date,
         deadline: reqData.deadline,
