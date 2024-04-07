@@ -8,6 +8,9 @@ import InvoiceSeriesModal from "../_modals/InvoiceSeriesModal";
 import ProductModal from "../_modals/ProductModal";
 import UpdateSvg from "@/components/svg/UpdateSvg";
 import DeleteSvg from "@/components/svg/DeleteSvg";
+import SuccessSvg from "@/components/svg/SuccessSvg";
+import ErrorSvg from "@/components/svg/ErrorSvg";
+import LoadingSvg from "@/components/svg/LoadingSvg";
 
 import {
   CompanyClientType,
@@ -15,6 +18,7 @@ import {
   InvoiceSeriesType,
   ProductType,
   ProductStateType,
+  InvoiceType,
 } from "@/types/prismaSchemaTypes";
 
 import "./InvoiceForm.scss";
@@ -53,6 +57,7 @@ const InvoiceForm = ({
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState<
     number | string
   >("");
+  const [currency, setCurrency] = useState<string>("RON");
   const [date, setDate] = useState<string>("");
   const [deadline, setDeadline] = useState<string>("");
   const [issuedByName, setIssuedByName] = useState<string>("");
@@ -61,8 +66,15 @@ const InvoiceForm = ({
   const [delegateName, setDelegateName] = useState<string>("");
   const [delegateCnp, setDelegateCnp] = useState<string>("");
   const [delegateAuto, setDelegateAuto] = useState<string>("");
-  const [mentions, setMentions] = useState<string>("");
+  const [termsValue, setTermsValue] = useState<string>("");
+  const [terms, setTerms] = useState<string[]>([]);
+  const [remarksValue, setRemarksValue] = useState<string>("");
+  const [remarks, setRemarks] = useState<string[]>([]);
+  const [invoiceSaveStatus, setInvoiceSaveStatus] = useState<
+    "error" | "success" | "loading" | ""
+  >("");
 
+  // INVOICE TOTALS
   const [invoiceDiscount, setInvoiceDiscount] = useState<number>(0);
   const [invoiceAppliedDiscount, setInvoiceAppliedDiscount] =
     useState<number>(0);
@@ -70,6 +82,7 @@ const InvoiceForm = ({
   const [invoiceSubtotal, setInvoiceSubtotal] = useState<number>(0);
   const [invoiceTotal, setInvoiceTotal] = useState<number>(0);
 
+  //  INVOICE PRODUCTS
   const [productNameId, setProductNameId] = useState<ProductStateType>({
     id: "",
     name: "",
@@ -77,10 +90,12 @@ const InvoiceForm = ({
   const [productUm, setProductUm] = useState<string>("");
   const [productQty, setProductQty] = useState<number | string>("");
   const [productPrice, setProductPrice] = useState<number | string>("");
-  const [productTva, setProductTva] = useState<number | string>("");
+  const [productTva, setProductTva] = useState<number | string>("0");
   const [invoiceProducts, setInvoiceProducts] = useState<InvoiceProductType[]>(
     []
   );
+  const [allProductFieldsFilled, setAllProductFieldsFilled] =
+    useState<boolean>(false);
 
   // HANDLERS
   const handleSelectedClient = (clientId: string) => {
@@ -160,7 +175,7 @@ const InvoiceForm = ({
     setProductUm("");
     setProductPrice("");
     setProductQty("");
-    setProductTva("");
+    setProductTva("0");
   };
 
   const handleInvoiceDiscount = () => {
@@ -178,11 +193,21 @@ const InvoiceForm = ({
     setInvoiceProducts((prev) => prev.filter((item) => item.id !== itemId));
   };
 
+  const handleTermsRemarks = (field: "terms" | "remarks", value: string) => {
+    if (field === "terms") {
+      setTerms((prev) => [...prev, value]);
+      setTermsValue("");
+    } else if (field === "remarks") {
+      setRemarks((prev) => [...prev, value]);
+      setRemarksValue("");
+    }
+  };
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-
+    setInvoiceSaveStatus("loading");
     const newInvoice = {
       clientName: selectedClient?.name,
       clientCui: selectedClient?.cui,
@@ -192,7 +217,7 @@ const InvoiceForm = ({
       clientEmail: selectedClient?.email,
       invoiceSeriesId: selectedInvoiceSerie?.id,
       invoiceSerie: selectedInvoiceSerie?.name,
-      number: selectedInvoiceNumber,
+      number: Number(selectedInvoiceNumber),
       date: date,
       deadline: deadline,
       products: invoiceProducts,
@@ -202,8 +227,9 @@ const InvoiceForm = ({
       delegateName: delegateName,
       delegateCnp: delegateCnp,
       delegateAuto: delegateAuto,
-      mentions: mentions,
-      currency: "RON",
+      terms: terms,
+      remarks: remarks,
+      currency: currency,
       subtotal: invoiceSubtotal,
       discount: invoiceAppliedDiscount,
       tva: invoiceTvaValue,
@@ -215,11 +241,23 @@ const InvoiceForm = ({
 
       if (res.status === 201) {
         console.log("SUCCESS", { res });
+        setInvoiceSaveStatus("success");
+        setTimeout(() => {
+          setInvoiceSaveStatus("");
+        }, 2000);
       } else {
         console.log({ res });
+        setInvoiceSaveStatus("error");
+        setTimeout(() => {
+          setInvoiceSaveStatus("");
+        }, 2000);
       }
     } catch (err) {
       console.log(err);
+      setInvoiceSaveStatus("error");
+      setTimeout(() => {
+        setInvoiceSaveStatus("");
+      }, 2000);
     }
   };
 
@@ -247,8 +285,18 @@ const InvoiceForm = ({
   }, [invoiceProducts, invoiceAppliedDiscount]);
 
   useEffect(() => {
-    console.log(selectedClient);
-  }, [selectedClient]);
+    if (
+      productNameId.name &&
+      productPrice &&
+      productQty &&
+      productTva &&
+      productUm
+    ) {
+      setAllProductFieldsFilled(true);
+    } else {
+      setAllProductFieldsFilled(false);
+    }
+  }, [productNameId.name, productPrice, productQty, productTva, productUm]);
 
   return (
     <>
@@ -275,7 +323,7 @@ const InvoiceForm = ({
           <div className="box bg-2">
             {/* CLIENT */}
             <label>
-              Selecteaza client
+              Selecteaza client{!selectedClient?.id && "*"}
               <select
                 required
                 onChange={(e) => handleSelectedClient(e.target.value)}
@@ -315,7 +363,7 @@ const InvoiceForm = ({
           <div className="box bg-1">
             {/* SERIES */}
             <label>
-              Serie*
+              Serie{!selectedInvoiceSerie?.id && "*"}
               <select
                 required
                 onChange={(e) => handleSelectedSerie(e.target.value)}
@@ -333,7 +381,7 @@ const InvoiceForm = ({
 
             {/* SERIES NUMBER */}
             <label>
-              Numar*
+              Numar{!selectedInvoiceNumber && "*"}
               <input
                 type="number"
                 required
@@ -352,9 +400,21 @@ const InvoiceForm = ({
               Adauga o serie noua
             </button>
 
+            <label>
+              Moneda{!currency && "*"}
+              <select
+                required
+                onChange={(e) => setCurrency(e.target.value)}
+                value={currency}
+              >
+                <option value="RON">RON</option>
+                <option value="EUR">EUR</option>
+              </select>
+            </label>
+
             {/* DATE */}
             <label>
-              Data emiterii*
+              Data emiterii{!date && "*"}
               <input
                 type="date"
                 required
@@ -378,7 +438,7 @@ const InvoiceForm = ({
           <div className="box bg-3" id="product-name-box">
             {/* PRODUCT NAME */}
             <label>
-              Denumire produs*
+              Denumire produs{!productNameId.name && "*"}
               <input
                 type="text"
                 value={productNameId.name}
@@ -403,7 +463,7 @@ const InvoiceForm = ({
 
             {/* UM */}
             <label>
-              UM*
+              UM{!productUm && "*"}
               <input
                 type="text"
                 value={productUm}
@@ -414,7 +474,7 @@ const InvoiceForm = ({
 
             {/* Quantity */}
             <label>
-              Cantitate*
+              Cantitate{!productQty && "*"}
               <input
                 type="number"
                 required
@@ -425,7 +485,7 @@ const InvoiceForm = ({
 
             {/* PRICE */}
             <label>
-              Pret*
+              Pret{!productPrice && "*"}
               <input
                 type="number"
                 required
@@ -436,7 +496,7 @@ const InvoiceForm = ({
 
             {/* TVA */}
             <label>
-              TVA*
+              TVA{!productTva && "*"}
               <select
                 required
                 value={productTva}
@@ -453,8 +513,9 @@ const InvoiceForm = ({
               type="button"
               className="btn-yellow"
               onClick={handleAddInvoiceProduct}
+              disabled={!allProductFieldsFilled}
             >
-              Adauga la factura
+              {!allProductFieldsFilled && "Completeaza &"} Adauga la factura
             </button>
           </div>
 
@@ -605,22 +666,74 @@ const InvoiceForm = ({
 
         <div className="organize-box">
           <div className="box">
-            <label className="textarea">
-              Mentiuni
+            <label className="textarea-label">
+              Termeni & Conditii
               <textarea
                 cols={30}
-                rows={10}
-                value={mentions}
-                onChange={(e) => setMentions(e.target.value)}
+                rows={5}
+                value={termsValue}
+                onChange={(e) => setTermsValue(e.target.value)}
               ></textarea>
+              {terms && (
+                <ul>
+                  {terms.map((item) => (
+                    <li key={item}>- {item}</li>
+                  ))}
+                </ul>
+              )}
+              <button
+                type="button"
+                className="btn-empty"
+                onClick={() => handleTermsRemarks("terms", termsValue)}
+              >
+                Adauga
+              </button>
+            </label>
+
+            <label className="textarea-label">
+              Observatii
+              <textarea
+                cols={30}
+                rows={5}
+                value={remarksValue}
+                onChange={(e) => setRemarksValue(e.target.value)}
+              ></textarea>
+              {remarks && (
+                <ul>
+                  {remarks.map((item) => (
+                    <li key={item}>- {item}</li>
+                  ))}
+                </ul>
+              )}
+              <button
+                type="button"
+                className="btn-empty"
+                onClick={() => handleTermsRemarks("remarks", remarksValue)}
+              >
+                Adauga
+              </button>
             </label>
           </div>
+
           <button
             type="button"
             className="btn-violet"
             onClick={(e) => handleSubmit(e)}
+            disabled={
+              invoiceSaveStatus === "error" ||
+              invoiceSaveStatus === "success" ||
+              invoiceSaveStatus === "loading"
+            }
           >
-            Salveaza factura
+            {invoiceSaveStatus === "error" ? (
+              <ErrorSvg color="red" size={15} />
+            ) : invoiceSaveStatus === "success" ? (
+              <SuccessSvg color="green" size={15} />
+            ) : invoiceSaveStatus === "loading" ? (
+              <LoadingSvg color="white" size={15} />
+            ) : (
+              "Salveaza factura"
+            )}
           </button>
         </div>
       </form>

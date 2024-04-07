@@ -24,14 +24,28 @@
           border-radius: 7px;
         }
       }
+      .textarea-label {
+        ul {
+          li {
+            font-weight: 500;
+            margin-top: 5px;
+          }
+        }
+        > button {
+          margin-top: 5px;
+          font-size: 14px;
+          padding: 3px 10px;
+        }
+      }
+      .textarea-label:not(:first-of-type) {
+        margin-top: 20px;
+      }
 
       .selected-option-data {
         li {
           display: grid;
           grid-template-columns: 1fr 3fr;
           margin-top: 3px;
-          b {
-          }
         }
       }
     }
@@ -129,9 +143,7 @@
               "idx name name name name value action"
               "idx qty um price tva value action";
           }
-          td {
-            //border: 1px solid red;
-          }
+
           .idx {
             grid-area: idx;
           }
@@ -203,8 +215,11 @@
             width: 250px;
           }
         }
-        .textarea {
+        .textarea-label {
           flex-direction: column;
+          textarea {
+            width: 100%;
+          }
         }
       }
     }
@@ -294,38 +309,6 @@
       }
     }
   }
-
-  // @media screen and (min-width: 1200px) {
-  //   .container-products {
-  //     .box {
-  //       display: flex;
-  //       flex-direction: row;
-  //       label {
-  //         flex-direction: column;
-  //         width: 17%;
-  //         input,
-  //         select {
-  //           width: 100%;
-  //         }
-  //       }
-  //       .btn-yellow {
-  //         margin-left: auto;
-  //       }
-  //     }
-  //   }
-  //   .organize-box {
-  //     display: flex;
-  //     flex-direction: column;
-  //     .box {
-  //       display: flex;
-  //       flex-direction: row;
-  //       justify-content: space-between;
-  //       .textarea {
-  //         width: 400px;
-  //       }
-  //     }
-  //   }
-  // }
 
   .bg-1 {
     background: linear-gradient(to right bottom, #c4c1eb, white);

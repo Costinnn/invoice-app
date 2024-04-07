@@ -69,7 +69,8 @@ export type InvoiceType = {
   delegateName: string;
   delegateCnp: string;
   delegateAuto: string;
-  mentions: string;
+  terms: string[];
+  remarks: string[];
   currency: string;
   subtotal: number;
   discount: number;
@@ -97,7 +98,8 @@ export type DbInvoiceType = {
   delegateName: string;
   delegateCnp: string;
   delegateAuto: string;
-  mentions: string;
+  terms: string[];
+  remarks: string[];
   currency: string;
   subtotal: number;
   discount: number;

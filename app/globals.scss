@@ -106,3 +106,21 @@ button {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+// LOADING SPINNER
+
+.spin {
+  transform: rotate(20deg);
+  animation: spin 2s linear infinite;
+  display: block;
+  margin: 3px auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

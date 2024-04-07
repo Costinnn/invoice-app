@@ -69,7 +69,8 @@ model Invoice {
   delegateCnp  String?
   delegateAuto String?
 
-  mentions String?
+  terms   String[]
+  remarks String[]
 
   subtotal Int
   discount Int
@@ -112,8 +113,8 @@ model Product {
 }
 
 model InvoiceProduct {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
   name       String
   um         String
   quantity   Int

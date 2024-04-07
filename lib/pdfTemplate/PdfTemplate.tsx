@@ -1,5 +1,3 @@
-import { getInvoiceProducts } from "@/lib/invoiceData/getInvoiceProducts";
-
 import { DbInvoiceType } from "@/types/prismaSchemaTypes";
 import { InvoiceProductType } from "@/types/prismaSchemaTypes";
 
@@ -25,7 +23,8 @@ const PdfTemplate = (
     delegateName,
     delegateCnp,
     delegateAuto,
-    mentions,
+    terms,
+    remarks,
     currency,
     subtotal,
     discount,
@@ -33,8 +32,8 @@ const PdfTemplate = (
     total,
   } = invoiceData;
 
-  const createDataTable = (data: InvoiceProductType[]) => {
-    const tableDisplayColumns = [];
+  const createProductsData = (data: InvoiceProductType[]) => {
+    const tableDisplayColumns: any[] = [];
     let idx = 1;
     for (const item of data) {
       tableDisplayColumns.push([
@@ -78,7 +77,19 @@ const PdfTemplate = (
     return tableDisplayColumns;
   };
 
-  const productsTableDisplay = createDataTable(invoiceProducts);
+  const createTermsRemarksData = (data: string[]) => {
+    const dataDisplayColumns: any[] = [];
+    for (const item of data) {
+      dataDisplayColumns.push([
+        { text: item, margin: [0, 3, 0, 0], fontSize: 10 },
+      ]);
+    }
+    return dataDisplayColumns;
+  };
+
+  const productsTableDisplay = createProductsData(invoiceProducts);
+  const termsDisplay = createTermsRemarksData(terms);
+  const remarksDisplay = createTermsRemarksData(remarks);
 
   const docDefinition: any = {
     content: [
@@ -344,11 +355,7 @@ const PdfTemplate = (
             margin: [0, 50, 0, 0],
             fontSize: 11,
           },
-          {
-            text: `Platile se fac in contul bancar mentionat`,
-            margin: [0, 3, 0, 0],
-            fontSize: 10,
-          },
+           ...termsDisplay ,
         ],
       },
 
@@ -361,7 +368,7 @@ const PdfTemplate = (
             margin: [0, 20, 0, 0],
             fontSize: 11,
           },
-          { text: `Rest de plata`, margin: [0, 3, 0, 0], fontSize: 10 },
+          ...remarksDisplay,
         ],
       },
     ],
