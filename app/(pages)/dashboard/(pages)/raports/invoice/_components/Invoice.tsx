@@ -7,7 +7,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import PdfTemplate from "@/lib/pdfTemplate/PdfTemplate";
 
-import { DbInvoiceType } from "@/types/prismaSchemaTypes";
+import { CompanyType, DbInvoiceType } from "@/types/prismaSchemaTypes";
 
 import invoiceImg from "@/public/images/invoice.png";
 
@@ -15,14 +15,15 @@ import "./Invoice.scss";
 
 type InvoiceComponentType = {
   invoiceData: DbInvoiceType;
+  company: CompanyType;
 };
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const Invoice = ({ invoiceData }: InvoiceComponentType) => {
+const Invoice = ({ invoiceData, company }: InvoiceComponentType) => {
   const invoiceProducts = JSON.parse(invoiceData.productsData);
 
-  const pdfTemplate = PdfTemplate(invoiceData, invoiceProducts);
+  const pdfTemplate = PdfTemplate(company, invoiceData, invoiceProducts);
 
   const openPdf = () => {
     const generatedPdf = pdfMake.createPdf(pdfTemplate);

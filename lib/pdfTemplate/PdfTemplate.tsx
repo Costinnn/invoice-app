@@ -1,7 +1,8 @@
-import { DbInvoiceType } from "@/types/prismaSchemaTypes";
+import { CompanyType, DbInvoiceType } from "@/types/prismaSchemaTypes";
 import { InvoiceProductType } from "@/types/prismaSchemaTypes";
 
 const PdfTemplate = (
+  company: CompanyType,
   invoiceData: DbInvoiceType,
   invoiceProducts: InvoiceProductType[]
 ) => {
@@ -100,22 +101,22 @@ const PdfTemplate = (
           // col 1
           {
             stack: [
-              { text: `FIRM NAME SRL\n`, fontSize: 18, bold: true },
+              { text: company.name, fontSize: 18, bold: true },
               {
-                text: `RC: J22/2222/2222 CUI: 31313131\n`,
+                text: `RC: ${company.rc} CUI: ${company.cui}`,
                 margin: [0, 5, 0, 0],
               },
               {
-                text: `Adresa: Iasi, Romania, Capital social: 200 lei\n`,
+                text: `Adresa: ${company.address}, Capital social: ${company.capital} lei`,
                 margin: [0, 3, 0, 0],
               },
               {
-                text: `ING IBAN: RO33 INGB 0000 9999 3333 3333\n`,
+                text: `IBAN: ${company.iban}`,
                 bold: true,
                 margin: [0, 3, 0, 0],
               },
               {
-                text: `Contact: contact.email@gmail.com\n`,
+                text: `Contact: ${company.email}`,
                 margin: [0, 3, 0, 0],
               },
             ],
@@ -355,7 +356,7 @@ const PdfTemplate = (
             margin: [0, 50, 0, 0],
             fontSize: 11,
           },
-           ...termsDisplay ,
+          ...termsDisplay,
         ],
       },
 
