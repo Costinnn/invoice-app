@@ -11,6 +11,7 @@ import AccountSvg from "./svg/AccountSvg";
 import logo from "@/public/images/logo.png";
 
 import "./Navbar.scss";
+import DashboardSvg from "./svg/DashboardSvg";
 
 type SignModalType = "signIn" | "signUp";
 
@@ -30,6 +31,18 @@ const NavBar = () => {
 
   return (
     <nav className="navbar section-wide">
+      <Link
+        href={`/testing`}
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "120px",
+          border: "1px solid red",
+          zIndex: "2",
+        }}
+      >
+        TEST PAGE
+      </Link>
       <SignUpModal
         toggleSignModal={toggleSignModal}
         isSignModalOpen={isSignModalOpen}
@@ -50,7 +63,10 @@ const NavBar = () => {
           <button className="btn-signup" onClick={() => toggleSignModal()}>
             <AccountSvg />
           </button>
-
+          <Link href={`/dashboard`} className="dash-link">
+            <DashboardSvg />
+            <span>Dashboard</span>
+          </Link>
           <button
             className={`menu-btn ${isMenuListOpen ? "closedesign" : ""}`}
             onClick={() => setIsMenuListOpen((prev) => !prev)}
@@ -63,7 +79,10 @@ const NavBar = () => {
 
         <ul className={`menu-list ${isMenuListOpen ? "isopen" : ""}`}>
           <li>
-            <Link href={`/dashboard`} onClick={() => setIsMenuListOpen(false)}>
+            <Link
+              href={`/dashboard/issuing/invoice`}
+              onClick={() => setIsMenuListOpen(false)}
+            >
               Factureaza
             </Link>
           </li>

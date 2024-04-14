@@ -48,12 +48,20 @@ const InvoiceForm = ({
     useState<ProductType[]>(dbProducts);
 
   // COMPONENT STATE
-  const [selectedClient, setSelectedClient] = useState<
-    CompanyClientType | undefined
-  >();
-  const [selectedInvoiceSerie, setSelectedInvoiceSerie] = useState<
-    InvoiceSeriesType | undefined
-  >({ id: "", name: "", lastNumber: 0, numbers: [] });
+  const [selectedClient, setSelectedClient] = useState<CompanyClientType>({
+    id: "",
+    name: "",
+    cui: "",
+    address: "",
+    sellerId: "",
+  });
+  const [selectedInvoiceSerie, setSelectedInvoiceSerie] =
+    useState<InvoiceSeriesType>({
+      id: "",
+      name: "",
+      lastNumber: 0,
+      numbers: [],
+    });
   const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState<
     number | string
   >("");
@@ -98,19 +106,94 @@ const InvoiceForm = ({
     useState<boolean>(false);
 
   // HANDLERS
+  const handleStateReset = (invSeriesId: string | undefined) => {
+    // clear fields
+    setSelectedClient({
+      id: "",
+      name: "",
+      cui: "",
+      address: "",
+      sellerId: "",
+    });
+    setSelectedInvoiceSerie({
+      id: "",
+      name: "",
+      lastNumber: 0,
+      numbers: [],
+    });
+
+    const updatedDbInvoiceSeriesState = dbInvoiceSeriesState.map((item) => {
+      if (item.id === invSeriesId) {
+        item.lastNumber += 1;
+        item.numbers.push(item.lastNumber);
+      }
+      return item;
+    });
+    setDbInvoiceSeriesState(updatedDbInvoiceSeriesState);
+
+    setSelectedInvoiceNumber("");
+    setDate("");
+    setDeadline("");
+    setIssuedByName("");
+    setIssuedByCnp("");
+    setAccompanyNotice("");
+    setDelegateName("");
+    setDelegateCnp("");
+    setDelegateAuto("");
+    setTermsValue("");
+    setTerms([]);
+    setRemarksValue("");
+    setRemarks([]);
+    setInvoiceDiscount(0);
+    setInvoiceAppliedDiscount(0);
+    setInvoiceSubtotal(0);
+    setInvoiceTvaValue(0);
+    setInvoiceTotal(0);
+    setProductNameId({
+      id: "",
+      name: "",
+    });
+    setProductUm("");
+    setProductQty("");
+    setProductPrice("");
+    setProductTva("0");
+    setInvoiceProducts([]);
+    setAllProductFieldsFilled(false);
+  };
+
   const handleSelectedClient = (clientId: string) => {
-    const clientData = dbCompanyClients.filter(
-      (item) => item.id === clientId
-    )[0];
-    setSelectedClient(clientData);
+    if (clientId !== "none") {
+      const clientData = dbCompanyClients.filter(
+        (item) => item.id === clientId
+      )[0];
+      setSelectedClient(clientData);
+    } else {
+      setSelectedClient({
+        id: "",
+        name: "",
+        cui: "",
+        address: "",
+        sellerId: "",
+      });
+    }
   };
 
   const handleSelectedSerie = (seriesId: string) => {
-    const invoiceSerieData = dbInvoiceSeries.filter(
-      (item) => item.id === seriesId
-    )[0];
-    setSelectedInvoiceSerie(invoiceSerieData);
-    setSelectedInvoiceNumber(invoiceSerieData.lastNumber! + 1);
+    if (seriesId !== "none") {
+      const invoiceSerieData = dbInvoiceSeriesState.filter(
+        (item) => item.id === seriesId
+      )[0];
+      setSelectedInvoiceSerie(invoiceSerieData);
+      setSelectedInvoiceNumber(invoiceSerieData.lastNumber! + 1);
+    } else {
+      setSelectedInvoiceSerie({
+        id: "",
+        name: "",
+        lastNumber: 0,
+        numbers: [],
+      });
+      setSelectedInvoiceNumber("");
+    }
   };
 
   const handleTypedProduct = (newNameValue: string) => {
@@ -208,7 +291,9 @@ const InvoiceForm = ({
   ) => {
     e.preventDefault();
     setInvoiceSaveStatus("loading");
+
     const newInvoice = {
+      clientId: selectedClient?.id,
       clientName: selectedClient?.name,
       clientCui: selectedClient?.cui,
       clientAddress: selectedClient?.address,
@@ -240,8 +325,8 @@ const InvoiceForm = ({
       const res = await axios.post("/api/addInvoice", newInvoice);
 
       if (res.status === 201) {
-        console.log("SUCCESS", { res });
         setInvoiceSaveStatus("success");
+        handleStateReset(selectedInvoiceSerie?.id);
         setTimeout(() => {
           setInvoiceSaveStatus("");
         }, 2000);
@@ -327,9 +412,11 @@ const InvoiceForm = ({
               <select
                 required
                 onChange={(e) => handleSelectedClient(e.target.value)}
-                value={selectedClient?.id}
+                value={
+                  selectedClient?.id.length > 0 ? selectedClient.id : "none"
+                }
               >
-                <option value={undefined}>Adauga client</option>
+                <option value={"none"}>Adauga client</option>
                 {dbCompanyClientsState.length > 0 &&
                   dbCompanyClientsState.map((item) => (
                     <option key={item.id as Key} value={item.id}>
@@ -345,7 +432,7 @@ const InvoiceForm = ({
             >
               Adauga client nou
             </button>
-            {selectedClient && (
+            {selectedClient?.id.length > 0 && (
               <ul className="selected-option-data">
                 <li>
                   <b>Client:</b> {selectedClient.name}
@@ -369,7 +456,7 @@ const InvoiceForm = ({
                 onChange={(e) => handleSelectedSerie(e.target.value)}
                 value={selectedInvoiceSerie?.id}
               >
-                <option value={undefined}>Adauga serie</option>
+                <option value={"none"}>Adauga serie</option>
                 {dbInvoiceSeriesState.length > 0 &&
                   dbInvoiceSeriesState.map((item: any) => (
                     <option key={item.id as Key} value={item.id}>
@@ -418,6 +505,7 @@ const InvoiceForm = ({
               <input
                 type="date"
                 required
+                value={date}
                 onChange={(e) => setDate(e.target.value)}
               />
             </label>

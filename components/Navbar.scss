@@ -32,6 +32,11 @@
       .btn-signup {
         padding: 7px;
       }
+      .dash-link {
+        span {
+          display: none;
+        }
+      }
       .menu-btn {
         justify-self: end;
         width: 22px;
@@ -120,6 +125,18 @@
         margin-left: auto;
         .btn-signup {
           display: none;
+        }
+        .dash-link {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          color: black;
+          font-size: 17px;
+          padding: 5px;
+          font-weight: 600;
+          span {
+            display: inline-block;
+          }
         }
         .menu-btn {
           display: none;

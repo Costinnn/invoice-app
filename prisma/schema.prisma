@@ -24,11 +24,13 @@ model Company {
   iban    String
   email   String
 
-  invoices        Invoice[]
-  clients         CompanyClient[]
-  series          InvoiceSeries[]
-  products        Product[]
-  invoiceProducts InvoiceProduct[]
+  invoices          Invoice[]
+  clients           CompanyClient[]
+  series            InvoiceSeries[]
+  products          Product[]
+  invoiceProducts   InvoiceProduct[]
+  monthlyIncome     monthlyIncome[]
+  monthlyTopClients monthlyTopClients[]
 }
 
 model CompanyClient {
@@ -43,6 +45,8 @@ model CompanyClient {
 
   seller   Company @relation(fields: [sellerId], references: [id])
   sellerId String  @db.ObjectId
+
+  topClient monthlyTopClients[]
 }
 
 model Invoice {
@@ -127,6 +131,36 @@ model InvoiceProduct {
 
   invoice   Invoice[] @relation(fields: [invoiceId], references: [id])
   invoiceId String[]  @db.ObjectId
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String  @db.ObjectId
+}
+
+model monthlyIncome {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  month       Int
+  monthName   String
+  year        Int
+  incomeValue Int
+  tvaValue    Int
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String  @db.ObjectId
+}
+
+model monthlyTopClients {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  clientName   String
+  month        Int
+  monthName    String
+  year         Int
+  value        Int
+  transactions Int
+
+  client   CompanyClient @relation(fields: [clientId], references: [id])
+  clientId String        @db.ObjectId
 
   company   Company @relation(fields: [companyId], references: [id])
   companyId String  @db.ObjectId

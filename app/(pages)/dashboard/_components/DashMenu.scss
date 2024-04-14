@@ -1,6 +1,7 @@
 .dashmenu {
   background-color: var(--violet-light);
   position: fixed;
+  z-index: 2;
   top: 60px;
   left: 0;
   height: calc(100dvh - 60px);

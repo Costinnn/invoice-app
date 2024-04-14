@@ -56,10 +56,11 @@ const Invoice = ({ invoiceData, company }: InvoiceComponentType) => {
           </span>
           <div className="row3">
             <span>
-              <b>Total:</b> {invoiceData.total}
+              <b>Valoare:</b> {invoiceData.total}
+              <span> {invoiceData.currency}</span>
             </span>
             <span>
-              <b>TVA:</b> {invoiceData.tva}
+              <b>TVA:</b> {invoiceData.tva} <span>{invoiceData.currency}</span>
             </span>
           </div>
         </div>
