@@ -85,10 +85,10 @@ const CompanyClientModal = ({
             setIsOpenClientModal(false);
           }}
         />
-        <h3>Adauga un client nou</h3>
+        <h3>Add new client</h3>
         <form>
           <label>
-            Nume client*
+            Client name*
             <input
               type="text"
               value={newClientName}
@@ -106,7 +106,7 @@ const CompanyClientModal = ({
             />
           </label>
           <label>
-            Adresa*
+            Address*
             <input
               type="text"
               value={newClientAddress}
@@ -144,7 +144,7 @@ const CompanyClientModal = ({
             className="btn-violet"
             onClick={(e) => handleSubmit(e)}
           >
-            Adauga
+            Add
           </button>
         </form>
       </div>

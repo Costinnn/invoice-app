@@ -42,6 +42,7 @@ const DashMenu = () => {
   return (
     <section className="dashmenu">
       <div className="content">
+        {/* MENU */}
         <ul className="menubar">
           <li>
             <Link href="/dashboard" onClick={closeSubMenu}>
@@ -60,7 +61,7 @@ const DashMenu = () => {
               }}
             >
               <DashInvoiceSvg color="#F3F8FF" />
-              <span>Emitere</span>
+              <span>Issuing</span>
             </button>
           </li>
           <li>
@@ -74,7 +75,7 @@ const DashMenu = () => {
               }}
             >
               <DashRaportsSvg color="#F3F8FF" />
-              <span>Rapoarte</span>
+              <span>Raports</span>
             </button>
           </li>
           <li>
@@ -88,54 +89,49 @@ const DashMenu = () => {
               }}
             >
               <DashConfigSvg color="#F3F8FF" />
-              <span>Configurare</span>
+              <span>Configuration</span>
             </button>
           </li>
           <li>
-            <Link
-              href="/dashboard/invoice"
-              type="button"
-              onClick={closeSubMenu}
-            >
+            <Link href="/dashboard" type="button" onClick={closeSubMenu}>
               <DashUserSvg color="#F3F8FF" />
               <span>Contul meu</span>
             </Link>
           </li>
         </ul>
+
+        {/* SUBMENUS */}
         {subMenusOpen.issues && (
           <div className="submenu-issue">
-            <h4>Emitere</h4>
+            <h4>Issuing</h4>
             <ul>
               <li>
                 <Link
                   href={"/dashboard/issuing/invoice"}
                   onClick={closeSubMenu}
                 >
-                  Factura
+                  Invoice
                 </Link>
               </li>
               <li>
                 <Link
-                  href={"/dashboard/issuing/invoice"}
+                  href={"/dashboard/issuing/canceledInvoice"}
                   onClick={closeSubMenu}
                 >
-                  Factura storno
+                  Canceled invoice
                 </Link>
               </li>
               <li>
                 <Link
-                  href={"/dashboard/issuing/invoice"}
+                  href={"/dashboard/issuing/receipt"}
                   onClick={closeSubMenu}
                 >
-                  Bon Fiscal
+                  Receipt
                 </Link>
               </li>
               <li>
-                <Link
-                  href={"/dashboard/issuing/invoice"}
-                  onClick={closeSubMenu}
-                >
-                  Aviz
+                <Link href={"/dashboard/issuing/notice"} onClick={closeSubMenu}>
+                  Notice
                 </Link>
               </li>
             </ul>
@@ -144,39 +140,30 @@ const DashMenu = () => {
 
         {subMenusOpen.raports && (
           <div className="submenu-raports">
-            <h4>Rapoarte</h4>
+            <h4>Raports</h4>
             <ul>
-              <h5>Documente emise</h5>
+              <h5>Issued documents</h5>
               <li>
                 <Link
                   href={"/dashboard/raports/invoice"}
                   onClick={closeSubMenu}
                 >
-                  Facturi
+                  Invoices
                 </Link>
               </li>
               <li>
-                <Link
-                  href={"/dashboard/raports/invoice"}
-                  onClick={closeSubMenu}
-                >
-                  Facturi storno
+                <Link href={"/dashboard"} onClick={closeSubMenu}>
+                  Canceled invoices
                 </Link>
               </li>
               <li>
-                <Link
-                  href={"/dashboard/raports/invoice"}
-                  onClick={closeSubMenu}
-                >
-                  Bonuri fiscale
+                <Link href={"/dashboard"} onClick={closeSubMenu}>
+                  Receipts
                 </Link>
               </li>
               <li>
-                <Link
-                  href={"/dashboard/raports/invoice"}
-                  onClick={closeSubMenu}
-                >
-                  Avize
+                <Link href={"/dashboard"} onClick={closeSubMenu}>
+                  Notices
                 </Link>
               </li>
             </ul>
@@ -185,17 +172,17 @@ const DashMenu = () => {
 
         {subMenusOpen.config && (
           <div className="submenu-config">
-            <h4>Configurare</h4>
+            <h4>Configuration</h4>
             <ul>
-              <h5>Datele firmei</h5>
+              <h5>Company data</h5>
               <li>
-                <Link href={"/dashboard/config/invoice"} onClick={closeSubMenu}>
-                  Generale
+                <Link href={"/dashboard"} onClick={closeSubMenu}>
+                  General
                 </Link>
               </li>
               <li>
-                <Link href={"/dashboard/config/invoice"} onClick={closeSubMenu}>
-                  Conturi
+                <Link href={"/dashboard"} onClick={closeSubMenu}>
+                  Accounts
                 </Link>
               </li>
             </ul>

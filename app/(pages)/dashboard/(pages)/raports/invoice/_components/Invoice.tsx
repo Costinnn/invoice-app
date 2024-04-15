@@ -45,10 +45,10 @@ const Invoice = ({ invoiceData, company }: InvoiceComponentType) => {
         <div className="text">
           <div className="row1">
             <span>
-              <b>Serie:</b> {invoiceData.invoiceSerie}
+              <b>Series:</b> {invoiceData.invoiceSerie}
             </span>
             <span>
-              <b>Nr:</b> {invoiceData.number}
+              <b>No:</b> {invoiceData.number}
             </span>
           </div>
           <span className="row2">
@@ -56,7 +56,7 @@ const Invoice = ({ invoiceData, company }: InvoiceComponentType) => {
           </span>
           <div className="row3">
             <span>
-              <b>Valoare:</b> {invoiceData.total}
+              <b>Value:</b> {invoiceData.total}
               <span> {invoiceData.currency}</span>
             </span>
             <span>
@@ -68,10 +68,10 @@ const Invoice = ({ invoiceData, company }: InvoiceComponentType) => {
 
       <div className="actions">
         <button type="button" className="btn-yellow" onClick={openPdf}>
-          Vezi PDF
+          Open PDF
         </button>
         <button type="button" className="btn-violet" onClick={downloadPdf}>
-          Descarca PDF
+          Download PDF
         </button>
       </div>
     </div>

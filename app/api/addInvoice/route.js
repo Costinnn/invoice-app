@@ -4,18 +4,18 @@ import { NextResponse } from "next/server";
 
 const companyIdData = "65fbd41cdccb0b09a7eca9d0";
 const MONTHS = [
-  "Ianuarie",
-  "Februarie",
-  "Martie",
-  "Aprilie",
-  "Mai",
-  "Iunie",
-  "Iulie",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
   "August",
-  "Septembrie",
-  "Octombrie",
-  "Noiembrie",
-  "Decembrie",
+  "September",
+  "Octomber",
+  "November",
+  "December",
 ];
 
 export async function POST(request) {

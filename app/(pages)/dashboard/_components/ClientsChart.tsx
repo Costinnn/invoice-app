@@ -37,7 +37,7 @@ const ClientsChart = ({ title, dbData }: DashElementProps) => {
   );
   const thisMonthDataset: any = [
     {
-      label: `Vanzari ${dbData.thisMonthTopClients[0].monthName}`,
+      label: `${dbData.thisMonthTopClients[0].monthName} Sales`,
       data: [...thisMonthDatasetData],
       backgroundColor: "rgba(255, 99, 99, 0.7)",
     },
@@ -59,7 +59,7 @@ const ClientsChart = ({ title, dbData }: DashElementProps) => {
   );
   const lastMonthDataset: any = [
     {
-      label: `Vanzari ${dbData.lastMonthTopClients[0].monthName}`,
+      label: `${dbData.lastMonthTopClients[0].monthName} Sales`,
       data: [...lastMonthDatasetData],
       backgroundColor: "rgba(99, 224, 255, 0.7)",
     },
@@ -81,7 +81,7 @@ const ClientsChart = ({ title, dbData }: DashElementProps) => {
   );
   const anteLastMonthDataset: any = [
     {
-      label: `Vanzari ${dbData.anteLastMonthTopClients[0].monthName}`,
+      label: `${dbData.anteLastMonthTopClients[0].monthName} Sales`,
       data: [...anteLastMonthDatasetData],
       backgroundColor: "rgba(255, 193, 99, 0.7)",
     },

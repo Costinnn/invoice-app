@@ -9,8 +9,8 @@ const page = async () => {
 
   return (
     <main className="dash-page">
-      <IncomeChart title={"Venituri totale"} dbData={incomeData} />
-      <ClientsChart title={"Clienti"} dbData={topClients} />
+      <IncomeChart title={"Total monthly income"} dbData={incomeData} />
+      <ClientsChart title={"Top monthly clients"} dbData={topClients} />
     </main>
   );
 };

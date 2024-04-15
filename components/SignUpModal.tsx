@@ -136,11 +136,11 @@ const SignUpModal = ({
           onClick={() => toggleSignModal()}
         />
 
-        <h3>{isSignInUp ? "Autentificare" : "Inregistrare"}</h3>
+        <h3>{isSignInUp ? "Login" : "Create account"}</h3>
         <p>
-          {isSignInUp ? "Nu ai un cont?" : "Ai deja un cont?"}
+          {isSignInUp ? "Don't have an account?" : "Already have an account?"}
           <span onClick={toggleSignIn}>
-            {isSignInUp ? "Inregistreaza-te aici" : "Autentifica-te aici"}
+            {isSignInUp ? "Login here" : "Create an account here"}
           </span>
         </p>
         <form onSubmit={handleSubmit}>
@@ -154,7 +154,7 @@ const SignUpModal = ({
                   activeLabel.username || username ? "active-label" : ""
                 }
               >
-                Nume de utilizator
+                Username
               </label>
               <input
                 type="text"
@@ -188,7 +188,7 @@ const SignUpModal = ({
               htmlFor="password"
               className={activeLabel.password || password ? "active-label" : ""}
             >
-              Parola
+              Password
             </label>
             <input
               type={isPasswordVisible.vpassword ? "text" : "password"}
@@ -216,7 +216,7 @@ const SignUpModal = ({
                   activeLabel.cpassword || cpassword ? "active-label" : ""
                 }
               >
-                Confirma parola
+                Confirm password
               </label>
               <input
                 type={isPasswordVisible.vcpassword ? "text" : "password"}
@@ -239,7 +239,7 @@ const SignUpModal = ({
           {feedBack && <span>{feedBack}</span>}
           {/* {isLoading && <Spinner />} */}
           <button className="btn-violet">
-            {isSignInUp ? "Autentifica-te" : "Inregistreaza-te"}
+            {isSignInUp ? "Login" : "Create account"}
           </button>
         </form>
       </div>

@@ -408,7 +408,7 @@ const InvoiceForm = ({
           <div className="box bg-2">
             {/* CLIENT */}
             <label>
-              Selecteaza client{!selectedClient?.id && "*"}
+              Client{!selectedClient?.id && "*"}
               <select
                 required
                 onChange={(e) => handleSelectedClient(e.target.value)}
@@ -416,7 +416,7 @@ const InvoiceForm = ({
                   selectedClient?.id.length > 0 ? selectedClient.id : "none"
                 }
               >
-                <option value={"none"}>Adauga client</option>
+                <option value={"none"}>Add client</option>
                 {dbCompanyClientsState.length > 0 &&
                   dbCompanyClientsState.map((item) => (
                     <option key={item.id as Key} value={item.id}>
@@ -430,7 +430,7 @@ const InvoiceForm = ({
               className="btn-violet"
               onClick={() => setIsOpenClientModal(true)}
             >
-              Adauga client nou
+              Add new client
             </button>
             {selectedClient?.id.length > 0 && (
               <ul className="selected-option-data">
@@ -441,7 +441,7 @@ const InvoiceForm = ({
                   <b>CUI:</b> {selectedClient.cui}
                 </li>
                 <li>
-                  <b>Adresa:</b> {selectedClient.address}
+                  <b>Address:</b> {selectedClient.address}
                 </li>
               </ul>
             )}
@@ -450,13 +450,13 @@ const InvoiceForm = ({
           <div className="box bg-1">
             {/* SERIES */}
             <label>
-              Serie{!selectedInvoiceSerie?.id && "*"}
+              Series{!selectedInvoiceSerie?.id && "*"}
               <select
                 required
                 onChange={(e) => handleSelectedSerie(e.target.value)}
                 value={selectedInvoiceSerie?.id}
               >
-                <option value={"none"}>Adauga serie</option>
+                <option value={"none"}>Add series</option>
                 {dbInvoiceSeriesState.length > 0 &&
                   dbInvoiceSeriesState.map((item: any) => (
                     <option key={item.id as Key} value={item.id}>
@@ -468,7 +468,7 @@ const InvoiceForm = ({
 
             {/* SERIES NUMBER */}
             <label>
-              Numar{!selectedInvoiceNumber && "*"}
+              Number{!selectedInvoiceNumber && "*"}
               <input
                 type="number"
                 required
@@ -484,11 +484,11 @@ const InvoiceForm = ({
               className="btn-violet"
               onClick={() => setIsOpenSeriesModal(true)}
             >
-              Adauga o serie noua
+              Add new series
             </button>
 
             <label>
-              Moneda{!currency && "*"}
+              Currency{!currency && "*"}
               <select
                 required
                 onChange={(e) => setCurrency(e.target.value)}
@@ -501,7 +501,7 @@ const InvoiceForm = ({
 
             {/* DATE */}
             <label>
-              Data emiterii{!date && "*"}
+              Issuing date{!date && "*"}
               <input
                 type="date"
                 required
@@ -512,7 +512,7 @@ const InvoiceForm = ({
 
             {/* DEADLINE */}
             <label>
-              Termen de plata
+              Deadline
               <input
                 type="date"
                 onChange={(e) => setDeadline(e.target.value)}
@@ -526,7 +526,7 @@ const InvoiceForm = ({
           <div className="box bg-3" id="product-name-box">
             {/* PRODUCT NAME */}
             <label>
-              Denumire produs{!productNameId.name && "*"}
+              Product name{!productNameId.name && "*"}
               <input
                 type="text"
                 value={productNameId.name}
@@ -551,7 +551,7 @@ const InvoiceForm = ({
 
             {/* UM */}
             <label>
-              UM{!productUm && "*"}
+              MU{!productUm && "*"}
               <input
                 type="text"
                 value={productUm}
@@ -562,7 +562,7 @@ const InvoiceForm = ({
 
             {/* Quantity */}
             <label>
-              Cantitate{!productQty && "*"}
+              Quantity{!productQty && "*"}
               <input
                 type="number"
                 required
@@ -573,7 +573,7 @@ const InvoiceForm = ({
 
             {/* PRICE */}
             <label>
-              Pret{!productPrice && "*"}
+              Price{!productPrice && "*"}
               <input
                 type="number"
                 required
@@ -603,7 +603,7 @@ const InvoiceForm = ({
               onClick={handleAddInvoiceProduct}
               disabled={!allProductFieldsFilled}
             >
-              {!allProductFieldsFilled && "Completeaza &"} Adauga la factura
+              {!allProductFieldsFilled && "Completeaza &"} Add to invoice
             </button>
           </div>
 
@@ -611,17 +611,17 @@ const InvoiceForm = ({
           <table>
             <thead>
               <tr className="desk-row">
-                <th>Nr.crt.</th>
-                <th>Denumire</th>
-                <th>Cant.</th>
-                <th>UM</th>
-                <th>Pret</th>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Qty.</th>
+                <th>MU</th>
+                <th>Price</th>
                 <th>TVA</th>
-                <th>Valoare</th>
+                <th>Value</th>
                 <th></th>
               </tr>
               <tr className="mobile-row">
-                <th>Produse/Servicii</th>
+                <th>Products/services</th>
               </tr>
             </thead>
             <tbody>
@@ -691,7 +691,7 @@ const InvoiceForm = ({
               className="btn-empty"
               onClick={handleInvoiceDiscount}
             >
-              Aplica discount %
+              Apply discount %
             </button>
           </div>
         </div>
@@ -699,7 +699,7 @@ const InvoiceForm = ({
         <div className="organize-box">
           <div className="box bg-4">
             <label>
-              Intocmit de
+              Issued by
               <input
                 type="text"
                 value={issuedByName}
@@ -715,7 +715,7 @@ const InvoiceForm = ({
               />
             </label>
             <label>
-              Aviz insotire
+              Accompany notice
               <input
                 type="text"
                 value={accompanyNotice}
@@ -726,7 +726,7 @@ const InvoiceForm = ({
 
           <div className="box bg-5">
             <label>
-              Delegat
+              Delegate
               <input
                 type="text"
                 value={delegateName}
@@ -734,7 +734,7 @@ const InvoiceForm = ({
               />
             </label>
             <label>
-              Buletin
+              ID
               <input
                 type="text"
                 value={delegateCnp}
@@ -755,7 +755,7 @@ const InvoiceForm = ({
         <div className="organize-box">
           <div className="box">
             <label className="textarea-label">
-              Termeni & Conditii
+              Terms & Conditions
               <textarea
                 cols={30}
                 rows={5}
@@ -774,12 +774,12 @@ const InvoiceForm = ({
                 className="btn-empty"
                 onClick={() => handleTermsRemarks("terms", termsValue)}
               >
-                Adauga
+                Add
               </button>
             </label>
 
             <label className="textarea-label">
-              Observatii
+              Remarks
               <textarea
                 cols={30}
                 rows={5}
@@ -798,7 +798,7 @@ const InvoiceForm = ({
                 className="btn-empty"
                 onClick={() => handleTermsRemarks("remarks", remarksValue)}
               >
-                Adauga
+                Add
               </button>
             </label>
           </div>
@@ -820,7 +820,7 @@ const InvoiceForm = ({
             ) : invoiceSaveStatus === "loading" ? (
               <LoadingSvg color="white" size={15} />
             ) : (
-              "Salveaza factura"
+              "Save invoice"
             )}
           </button>
         </div>

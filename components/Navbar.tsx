@@ -83,12 +83,12 @@ const NavBar = () => {
               href={`/dashboard/issuing/invoice`}
               onClick={() => setIsMenuListOpen(false)}
             >
-              Factureaza
+              Issuing
             </Link>
           </li>
           <li>
             <Link href={`/`} onClick={() => setIsMenuListOpen(false)}>
-              Preturi
+              Prices
             </Link>
           </li>
           <li>
@@ -102,14 +102,14 @@ const NavBar = () => {
             className="btn-empty"
             onClick={() => handleDesktopAuth("signIn")}
           >
-            Autentificare
+            Login
           </button>
-          <span>SAU</span>
+          <span>OR</span>
           <button
             className="btn-yellow"
             onClick={() => handleDesktopAuth("signUp")}
           >
-            Incepe gratuit
+            Start for free
           </button>
         </div>
       </div>

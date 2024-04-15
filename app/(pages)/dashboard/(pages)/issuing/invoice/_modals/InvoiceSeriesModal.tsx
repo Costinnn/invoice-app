@@ -82,10 +82,10 @@ const InvoiceSeriesModal = ({
             setIsOpenSeriesModal(false);
           }}
         />
-        <h3>Adauga o serie noua</h3>
+        <h3>Add new series</h3>
         <form>
           <label>
-            Serie*
+            Series*
             <input
               type="text"
               value={name}
@@ -94,7 +94,7 @@ const InvoiceSeriesModal = ({
             />
           </label>
           <label>
-            Primul numar*
+            First number*
             <input
               type="number"
               value={startingNumber || ""}
@@ -108,7 +108,7 @@ const InvoiceSeriesModal = ({
             className="btn-violet"
             onClick={(e) => handleSubmit(e)}
           >
-            Adauga
+            Add
           </button>
         </form>
       </div>
