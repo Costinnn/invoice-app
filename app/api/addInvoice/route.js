@@ -1,22 +1,8 @@
 import { prisma } from "@/lib/prismaDbClient";
-import { connect } from "http2";
 import { NextResponse } from "next/server";
 
 const companyIdData = "65fbd41cdccb0b09a7eca9d0";
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "Octomber",
-  "November",
-  "December",
-];
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Octomber", "November", "December"];
 
 export async function POST(request) {
   try {
@@ -45,10 +31,7 @@ export async function POST(request) {
       if (newInvoiceProduct) {
         newDbInvoiceProducts.push(newInvoiceProduct);
       } else {
-        return NextResponse.json(
-          { error: "Could not add invoice products!" },
-          { status: 500 }
-        );
+        return NextResponse.json({ error: "Could not add invoice products!" }, { status: 500 });
       }
     }
 
@@ -106,10 +89,7 @@ export async function POST(request) {
         },
       });
       if (!monthlyIncome) {
-        return NextResponse.json(
-          { error: "Could not update monthly income!" },
-          { status: 500 }
-        );
+        return NextResponse.json({ error: "Could not update monthly income!" }, { status: 500 });
       }
     } else {
       const monthlyIncome = await prisma.monthlyIncome.create({
@@ -123,21 +103,14 @@ export async function POST(request) {
         },
       });
       if (!monthlyIncome) {
-        return NextResponse.json(
-          { error: "Could not create monthly income!" },
-          { status: 500 }
-        );
+        return NextResponse.json({ error: "Could not create monthly income!" }, { status: 500 });
       }
     }
 
-    // // CREATE/UPDATE MONTHLY TOP CLIENTS
+    //  CREATE/UPDATE MONTHLY TOP CLIENTS
     const dbMonthlyTopClients = await prisma.monthlyTopClients.findMany({
       where: {
-        AND: [
-          { clientId: String(reqData.clientId) },
-          { month: invoiceMonthNum },
-          { year: invoiceDate.getFullYear() },
-        ],
+        AND: [{ clientId: String(reqData.clientId) }, { month: invoiceMonthNum }, { year: invoiceDate.getFullYear() }],
       },
     });
 
@@ -152,10 +125,7 @@ export async function POST(request) {
         },
       });
       if (!monthlyTopClients) {
-        return NextResponse.json(
-          { error: "Could not update monthly top clients!" },
-          { status: 500 }
-        );
+        return NextResponse.json({ error: "Could not update monthly top clients!" }, { status: 500 });
       }
     } else {
       const monthlyTopClients = await prisma.monthlyTopClients.create({
@@ -171,10 +141,7 @@ export async function POST(request) {
         },
       });
       if (!monthlyTopClients) {
-        return NextResponse.json(
-          { error: "Could not create monthly top clients!" },
-          { status: 500 }
-        );
+        return NextResponse.json({ error: "Could not create monthly top clients!" }, { status: 500 });
       }
     }
 
@@ -193,20 +160,11 @@ export async function POST(request) {
       if (updatedSerieNumber) {
         return NextResponse.json({ message: "Success" }, { status: 201 });
       }
-      return NextResponse.json(
-        { error: "Could not update invoice series number!" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Could not update invoice series number!" }, { status: 500 });
     }
 
-    return NextResponse.json(
-      { error: "Could not add invoice!" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Could not add invoice!" }, { status: 500 });
   } catch (err) {
-    return NextResponse.json(
-      { error: `INVOICE_API_ERROR ${err}` },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: `INVOICE_API_ERROR ${err}` }, { status: 500 });
   }
 }

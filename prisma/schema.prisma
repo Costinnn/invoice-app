@@ -31,6 +31,7 @@ model Company {
   invoiceProducts   InvoiceProduct[]
   monthlyIncome     monthlyIncome[]
   monthlyTopClients monthlyTopClients[]
+  CanceledInvoice   CanceledInvoice[]
 }
 
 model CompanyClient {
@@ -92,6 +93,47 @@ model Invoice {
   invoiceSerie    String
 }
 
+model CanceledInvoice {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  number Int
+  date   String
+
+  clientName    String
+  clientCui     String
+  clientAddress String
+  clientRc      String?
+  clientIban    String?
+  clientEmail   String?
+  currency      String
+
+  issuedByName    String?
+  issuedByCnp     String?
+  accompanyNotice String?
+
+  delegateName String?
+  delegateCnp  String?
+  delegateAuto String?
+
+  terms   String[]
+  remarks String[]
+
+  subtotal Int
+  tva      Int
+  total    Int
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String  @db.ObjectId
+
+  invoiceProducts   InvoiceProduct[] @relation()
+  invoiceProductsId String[]         @db.ObjectId
+
+  serie InvoiceSeries @relation(fields: [invoiceSeriesId], references: [id])
+
+  invoiceSeriesId String @db.ObjectId
+  invoiceSerie    String
+}
+
 model InvoiceSeries {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -99,7 +141,8 @@ model InvoiceSeries {
   lastNumber Int
   numbers    Int[]
 
-  invoices Invoice[]
+  invoices         Invoice[]
+  canceledInvoices CanceledInvoice[]
 
   company   Company @relation(fields: [companyId], references: [id])
   companyId String  @db.ObjectId
@@ -134,6 +177,9 @@ model InvoiceProduct {
 
   company   Company @relation(fields: [companyId], references: [id])
   companyId String  @db.ObjectId
+
+  CanceledInvoice   CanceledInvoice? @relation(fields: [canceledInvoiceId], references: [id])
+  canceledInvoiceId String?          @db.ObjectId
 }
 
 model monthlyIncome {

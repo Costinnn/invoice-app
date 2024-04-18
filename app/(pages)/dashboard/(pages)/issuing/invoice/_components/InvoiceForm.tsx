@@ -12,14 +12,7 @@ import SuccessSvg from "@/components/svg/SuccessSvg";
 import ErrorSvg from "@/components/svg/ErrorSvg";
 import LoadingSvg from "@/components/svg/LoadingSvg";
 
-import {
-  CompanyClientType,
-  InvoiceProductType,
-  InvoiceSeriesType,
-  ProductType,
-  ProductStateType,
-  InvoiceType,
-} from "@/types/prismaSchemaTypes";
+import { CompanyClientType, InvoiceProductType, InvoiceSeriesType, ProductType, ProductStateType, InvoiceType } from "@/types/prismaSchemaTypes";
 
 import "./InvoiceForm.scss";
 
@@ -29,23 +22,16 @@ type InvoiceFormType = {
   dbProducts: ProductType[];
 };
 
-const InvoiceForm = ({
-  dbCompanyClients,
-  dbInvoiceSeries,
-  dbProducts,
-}: InvoiceFormType) => {
+const InvoiceForm = ({ dbCompanyClients, dbInvoiceSeries, dbProducts }: InvoiceFormType) => {
   // MODALS
   const [isOpenClientModal, setIsOpenClientModal] = useState<boolean>(false);
   const [isOpenSeriesModal, setIsOpenSeriesModal] = useState<boolean>(false);
   const [isProductModal, setIsProductModal] = useState<boolean>(false);
 
   // DB STATE
-  const [dbCompanyClientsState, setDbCompanyClientsState] =
-    useState<CompanyClientType[]>(dbCompanyClients);
-  const [dbInvoiceSeriesState, setDbInvoiceSeriesState] =
-    useState<InvoiceSeriesType[]>(dbInvoiceSeries);
-  const [dbProductsState, setDbProductsState] =
-    useState<ProductType[]>(dbProducts);
+  const [dbCompanyClientsState, setDbCompanyClientsState] = useState<CompanyClientType[]>(dbCompanyClients);
+  const [dbInvoiceSeriesState, setDbInvoiceSeriesState] = useState<InvoiceSeriesType[]>(dbInvoiceSeries);
+  const [dbProductsState, setDbProductsState] = useState<ProductType[]>(dbProducts);
 
   // COMPONENT STATE
   const [selectedClient, setSelectedClient] = useState<CompanyClientType>({
@@ -55,16 +41,13 @@ const InvoiceForm = ({
     address: "",
     sellerId: "",
   });
-  const [selectedInvoiceSerie, setSelectedInvoiceSerie] =
-    useState<InvoiceSeriesType>({
-      id: "",
-      name: "",
-      lastNumber: 0,
-      numbers: [],
-    });
-  const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState<
-    number | string
-  >("");
+  const [selectedInvoiceSerie, setSelectedInvoiceSerie] = useState<InvoiceSeriesType>({
+    id: "",
+    name: "",
+    lastNumber: 0,
+    numbers: [],
+  });
+  const [selectedInvoiceNumber, setSelectedInvoiceNumber] = useState<number | string>("");
   const [currency, setCurrency] = useState<string>("RON");
   const [date, setDate] = useState<string>("");
   const [deadline, setDeadline] = useState<string>("");
@@ -78,14 +61,11 @@ const InvoiceForm = ({
   const [terms, setTerms] = useState<string[]>([]);
   const [remarksValue, setRemarksValue] = useState<string>("");
   const [remarks, setRemarks] = useState<string[]>([]);
-  const [invoiceSaveStatus, setInvoiceSaveStatus] = useState<
-    "error" | "success" | "loading" | ""
-  >("");
+  const [invoiceSaveStatus, setInvoiceSaveStatus] = useState<"error" | "success" | "loading" | "">("");
 
   // INVOICE TOTALS
   const [invoiceDiscount, setInvoiceDiscount] = useState<number>(0);
-  const [invoiceAppliedDiscount, setInvoiceAppliedDiscount] =
-    useState<number>(0);
+  const [invoiceAppliedDiscount, setInvoiceAppliedDiscount] = useState<number>(0);
   const [invoiceTvaValue, setInvoiceTvaValue] = useState<number>(0);
   const [invoiceSubtotal, setInvoiceSubtotal] = useState<number>(0);
   const [invoiceTotal, setInvoiceTotal] = useState<number>(0);
@@ -99,11 +79,8 @@ const InvoiceForm = ({
   const [productQty, setProductQty] = useState<number | string>("");
   const [productPrice, setProductPrice] = useState<number | string>("");
   const [productTva, setProductTva] = useState<number | string>("0");
-  const [invoiceProducts, setInvoiceProducts] = useState<InvoiceProductType[]>(
-    []
-  );
-  const [allProductFieldsFilled, setAllProductFieldsFilled] =
-    useState<boolean>(false);
+  const [invoiceProducts, setInvoiceProducts] = useState<InvoiceProductType[]>([]);
+  const [allProductFieldsFilled, setAllProductFieldsFilled] = useState<boolean>(false);
 
   // HANDLERS
   const handleStateReset = (invSeriesId: string | undefined) => {
@@ -163,9 +140,7 @@ const InvoiceForm = ({
 
   const handleSelectedClient = (clientId: string) => {
     if (clientId !== "none") {
-      const clientData = dbCompanyClients.filter(
-        (item) => item.id === clientId
-      )[0];
+      const clientData = dbCompanyClients.filter((item) => item.id === clientId)[0];
       setSelectedClient(clientData);
     } else {
       setSelectedClient({
@@ -180,9 +155,7 @@ const InvoiceForm = ({
 
   const handleSelectedSerie = (seriesId: string) => {
     if (seriesId !== "none") {
-      const invoiceSerieData = dbInvoiceSeriesState.filter(
-        (item) => item.id === seriesId
-      )[0];
+      const invoiceSerieData = dbInvoiceSeriesState.filter((item) => item.id === seriesId)[0];
       setSelectedInvoiceSerie(invoiceSerieData);
       setSelectedInvoiceNumber(invoiceSerieData.lastNumber! + 1);
     } else {
@@ -202,8 +175,7 @@ const InvoiceForm = ({
 
   const handleAddInvoiceProduct = async () => {
     const totalValueOfAddedProduct =
-      Number(productQty) * Number(productPrice) +
-      Number(productQty) * Number(productPrice) * (Number(productTva) / 100);
+      Number(productQty) * Number(productPrice) + Number(productQty) * Number(productPrice) * (Number(productTva) / 100);
 
     if (productNameId.id === "new") {
       const newDbProduct = { name: productNameId.name, um: productUm };
@@ -262,12 +234,7 @@ const InvoiceForm = ({
   };
 
   const handleInvoiceDiscount = () => {
-    if (
-      invoiceDiscount >= 0 &&
-      invoiceDiscount <= 100 &&
-      invoiceSubtotal > 0 &&
-      invoiceDiscount !== invoiceAppliedDiscount
-    ) {
+    if (invoiceDiscount >= 0 && invoiceDiscount <= 100 && invoiceSubtotal > 0 && invoiceDiscount !== invoiceAppliedDiscount) {
       setInvoiceAppliedDiscount(invoiceDiscount);
     }
   };
@@ -286,9 +253,7 @@ const InvoiceForm = ({
     }
   };
 
-  const handleSubmit = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     setInvoiceSaveStatus("loading");
 
@@ -357,26 +322,15 @@ const InvoiceForm = ({
       const itemTva = itemSubtotal * (item.tva / 100);
 
       setInvoiceSubtotal((prev) => prev + itemSubtotal);
-      setInvoiceTvaValue(
-        (prev) => prev + itemTva - itemTva * (invoiceAppliedDiscount / 100)
-      );
+      setInvoiceTvaValue((prev) => prev + itemTva - itemTva * (invoiceAppliedDiscount / 100));
       setInvoiceTotal(
-        (prev) =>
-          prev +
-          (itemSubtotal - itemSubtotal * (invoiceAppliedDiscount / 100)) +
-          (itemTva - itemTva * (invoiceAppliedDiscount / 100))
+        (prev) => prev + (itemSubtotal - itemSubtotal * (invoiceAppliedDiscount / 100)) + (itemTva - itemTva * (invoiceAppliedDiscount / 100))
       );
     });
   }, [invoiceProducts, invoiceAppliedDiscount]);
 
   useEffect(() => {
-    if (
-      productNameId.name &&
-      productPrice &&
-      productQty &&
-      productTva &&
-      productUm
-    ) {
+    if (productNameId.name && productPrice && productQty && productTva && productUm) {
       setAllProductFieldsFilled(true);
     } else {
       setAllProductFieldsFilled(false);
@@ -412,9 +366,7 @@ const InvoiceForm = ({
               <select
                 required
                 onChange={(e) => handleSelectedClient(e.target.value)}
-                value={
-                  selectedClient?.id.length > 0 ? selectedClient.id : "none"
-                }
+                value={selectedClient?.id.length > 0 ? selectedClient.id : "none"}
               >
                 <option value={"none"}>Add client</option>
                 {dbCompanyClientsState.length > 0 &&
@@ -425,11 +377,7 @@ const InvoiceForm = ({
                   ))}
               </select>
             </label>
-            <button
-              type="button"
-              className="btn-violet"
-              onClick={() => setIsOpenClientModal(true)}
-            >
+            <button type="button" className="btn-violet" onClick={() => setIsOpenClientModal(true)}>
               Add new client
             </button>
             {selectedClient?.id.length > 0 && (
@@ -451,11 +399,7 @@ const InvoiceForm = ({
             {/* SERIES */}
             <label>
               Series{!selectedInvoiceSerie?.id && "*"}
-              <select
-                required
-                onChange={(e) => handleSelectedSerie(e.target.value)}
-                value={selectedInvoiceSerie?.id}
-              >
+              <select required onChange={(e) => handleSelectedSerie(e.target.value)} value={selectedInvoiceSerie?.id}>
                 <option value={"none"}>Add series</option>
                 {dbInvoiceSeriesState.length > 0 &&
                   dbInvoiceSeriesState.map((item: any) => (
@@ -474,26 +418,16 @@ const InvoiceForm = ({
                 required
                 min={selectedInvoiceSerie?.lastNumber}
                 value={selectedInvoiceNumber}
-                onChange={(e) =>
-                  setSelectedInvoiceNumber(Number(e.target.value))
-                }
+                onChange={(e) => setSelectedInvoiceNumber(Number(e.target.value))}
               />
             </label>
-            <button
-              type="button"
-              className="btn-violet"
-              onClick={() => setIsOpenSeriesModal(true)}
-            >
+            <button type="button" className="btn-violet" onClick={() => setIsOpenSeriesModal(true)}>
               Add new series
             </button>
 
             <label>
               Currency{!currency && "*"}
-              <select
-                required
-                onChange={(e) => setCurrency(e.target.value)}
-                value={currency}
-              >
+              <select required onChange={(e) => setCurrency(e.target.value)} value={currency}>
                 <option value="RON">RON</option>
                 <option value="EUR">EUR</option>
               </select>
@@ -502,21 +436,13 @@ const InvoiceForm = ({
             {/* DATE */}
             <label>
               Issuing date{!date && "*"}
-              <input
-                type="date"
-                required
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
+              <input type="date" required value={date} onChange={(e) => setDate(e.target.value)} />
             </label>
 
             {/* DEADLINE */}
             <label>
               Deadline
-              <input
-                type="date"
-                onChange={(e) => setDeadline(e.target.value)}
-              />
+              <input type="date" onChange={(e) => setDeadline(e.target.value)} />
             </label>
           </div>
         </div>
@@ -552,44 +478,25 @@ const InvoiceForm = ({
             {/* UM */}
             <label>
               MU{!productUm && "*"}
-              <input
-                type="text"
-                value={productUm}
-                required
-                onChange={(e) => setProductUm(e.target.value)}
-              />
+              <input type="text" value={productUm} required onChange={(e) => setProductUm(e.target.value)} />
             </label>
 
             {/* Quantity */}
             <label>
               Quantity{!productQty && "*"}
-              <input
-                type="number"
-                required
-                value={productQty}
-                onChange={(e) => setProductQty(Number(e.target.value))}
-              />
+              <input type="number" required value={productQty} onChange={(e) => setProductQty(Number(e.target.value))} />
             </label>
 
             {/* PRICE */}
             <label>
               Price{!productPrice && "*"}
-              <input
-                type="number"
-                required
-                value={productPrice}
-                onChange={(e) => setProductPrice(Number(e.target.value))}
-              />
+              <input type="number" required value={productPrice} onChange={(e) => setProductPrice(Number(e.target.value))} />
             </label>
 
             {/* TVA */}
             <label>
               TVA{!productTva && "*"}
-              <select
-                required
-                value={productTva}
-                onChange={(e) => setProductTva(Number(e.target.value))}
-              >
+              <select required value={productTva} onChange={(e) => setProductTva(Number(e.target.value))}>
                 <option value="0">0%</option>
                 <option value="5">5%</option>
                 <option value="9">9%</option>
@@ -597,12 +504,7 @@ const InvoiceForm = ({
               </select>
             </label>
 
-            <button
-              type="button"
-              className="btn-yellow"
-              onClick={handleAddInvoiceProduct}
-              disabled={!allProductFieldsFilled}
-            >
+            <button type="button" className="btn-yellow" onClick={handleAddInvoiceProduct} disabled={!allProductFieldsFilled}>
               {!allProductFieldsFilled && "Completeaza &"} Add to invoice
             </button>
           </div>
@@ -644,10 +546,7 @@ const InvoiceForm = ({
                         <UpdateSvg color="blue" />
                       </button>
 
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteInvoiceItem(item.id)}
-                      >
+                      <button type="button" onClick={() => handleDeleteInvoiceItem(item.id)}>
                         <DeleteSvg color="red" />
                       </button>
                     </td>
@@ -675,22 +574,14 @@ const InvoiceForm = ({
 
           <div className="discount-box">
             <input
-              className={
-                invoiceDiscount < 0 || invoiceDiscount > 100
-                  ? "input-error"
-                  : ""
-              }
+              className={invoiceDiscount < 0 || invoiceDiscount > 100 ? "input-error" : ""}
               type="number"
               min="0"
               max={100}
               value={invoiceDiscount}
               onChange={(e) => setInvoiceDiscount(Number(e.target.value))}
             />
-            <button
-              type="button"
-              className="btn-empty"
-              onClick={handleInvoiceDiscount}
-            >
+            <button type="button" className="btn-empty" onClick={handleInvoiceDiscount}>
               Apply discount %
             </button>
           </div>
@@ -700,54 +591,30 @@ const InvoiceForm = ({
           <div className="box bg-4">
             <label>
               Issued by
-              <input
-                type="text"
-                value={issuedByName}
-                onChange={(e) => setIssuedByName(e.target.value)}
-              />
+              <input type="text" value={issuedByName} onChange={(e) => setIssuedByName(e.target.value)} />
             </label>
             <label>
               CNP
-              <input
-                type="text"
-                value={issuedByCnp}
-                onChange={(e) => setIssuedByCnp(e.target.value)}
-              />
+              <input type="text" value={issuedByCnp} onChange={(e) => setIssuedByCnp(e.target.value)} />
             </label>
             <label>
               Accompany notice
-              <input
-                type="text"
-                value={accompanyNotice}
-                onChange={(e) => setAccompanyNotice(e.target.value)}
-              />
+              <input type="text" value={accompanyNotice} onChange={(e) => setAccompanyNotice(e.target.value)} />
             </label>
           </div>
 
           <div className="box bg-5">
             <label>
               Delegate
-              <input
-                type="text"
-                value={delegateName}
-                onChange={(e) => setDelegateName(e.target.value)}
-              />
+              <input type="text" value={delegateName} onChange={(e) => setDelegateName(e.target.value)} />
             </label>
             <label>
               ID
-              <input
-                type="text"
-                value={delegateCnp}
-                onChange={(e) => setDelegateCnp(e.target.value)}
-              />
+              <input type="text" value={delegateCnp} onChange={(e) => setDelegateCnp(e.target.value)} />
             </label>
             <label>
               Auto
-              <input
-                type="text"
-                value={delegateAuto}
-                onChange={(e) => setDelegateAuto(e.target.value)}
-              />
+              <input type="text" value={delegateAuto} onChange={(e) => setDelegateAuto(e.target.value)} />
             </label>
           </div>
         </div>
@@ -756,12 +623,7 @@ const InvoiceForm = ({
           <div className="box">
             <label className="textarea-label">
               Terms & Conditions
-              <textarea
-                cols={30}
-                rows={5}
-                value={termsValue}
-                onChange={(e) => setTermsValue(e.target.value)}
-              ></textarea>
+              <textarea cols={30} rows={5} value={termsValue} onChange={(e) => setTermsValue(e.target.value)}></textarea>
               {terms && (
                 <ul>
                   {terms.map((item) => (
@@ -769,23 +631,15 @@ const InvoiceForm = ({
                   ))}
                 </ul>
               )}
-              <button
-                type="button"
-                className="btn-empty"
-                onClick={() => handleTermsRemarks("terms", termsValue)}
-              >
+              <button type="button" className="btn-empty" onClick={() => handleTermsRemarks("terms", termsValue)}>
                 Add
               </button>
             </label>
-
+          </div>
+          <div className="box">
             <label className="textarea-label">
               Remarks
-              <textarea
-                cols={30}
-                rows={5}
-                value={remarksValue}
-                onChange={(e) => setRemarksValue(e.target.value)}
-              ></textarea>
+              <textarea cols={30} rows={5} value={remarksValue} onChange={(e) => setRemarksValue(e.target.value)}></textarea>
               {remarks && (
                 <ul>
                   {remarks.map((item) => (
@@ -793,37 +647,28 @@ const InvoiceForm = ({
                   ))}
                 </ul>
               )}
-              <button
-                type="button"
-                className="btn-empty"
-                onClick={() => handleTermsRemarks("remarks", remarksValue)}
-              >
+              <button type="button" className="btn-empty" onClick={() => handleTermsRemarks("remarks", remarksValue)}>
                 Add
               </button>
             </label>
           </div>
-
-          <button
-            type="button"
-            className="btn-violet"
-            onClick={(e) => handleSubmit(e)}
-            disabled={
-              invoiceSaveStatus === "error" ||
-              invoiceSaveStatus === "success" ||
-              invoiceSaveStatus === "loading"
-            }
-          >
-            {invoiceSaveStatus === "error" ? (
-              <ErrorSvg color="red" size={15} />
-            ) : invoiceSaveStatus === "success" ? (
-              <SuccessSvg color="green" size={15} />
-            ) : invoiceSaveStatus === "loading" ? (
-              <LoadingSvg color="white" size={15} />
-            ) : (
-              "Save invoice"
-            )}
-          </button>
         </div>
+        <button
+          type="button"
+          className="btn-violet"
+          onClick={(e) => handleSubmit(e)}
+          disabled={invoiceSaveStatus === "error" || invoiceSaveStatus === "success" || invoiceSaveStatus === "loading"}
+        >
+          {invoiceSaveStatus === "error" ? (
+            <ErrorSvg color="red" size={15} />
+          ) : invoiceSaveStatus === "success" ? (
+            <SuccessSvg color="green" size={15} />
+          ) : invoiceSaveStatus === "loading" ? (
+            <LoadingSvg color="white" size={15} />
+          ) : (
+            "Save invoice"
+          )}
+        </button>
       </form>
     </>
   );

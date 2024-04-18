@@ -49,6 +49,8 @@ export type InvoiceProductType = {
   totalValue: number;
 };
 
+export type ReturnedInvoiceProductType = InvoiceProductType & { productId: string; companyId: string; invoiceId: string };
+
 export type InvoiceType = {
   id: string;
   clientName: string;
