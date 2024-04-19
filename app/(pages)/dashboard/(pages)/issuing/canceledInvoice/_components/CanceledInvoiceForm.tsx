@@ -147,7 +147,8 @@ const CanceledInvoiceForm = ({ dbData }: CanceledInvoiceFormProps) => {
       setTotalReturnedValue((prev) => prev + TVAValuePTR + totalValuePTR);
 
       const newReturnedProduct = {
-        id: dbProductToReturn.id,
+        id: "",
+        returnedInvoiceProductId: dbProductToReturn.id,
         name: dbProductToReturn.name,
         um: dbProductToReturn.um,
         price: dbProductToReturn.price,
@@ -173,6 +174,8 @@ const CanceledInvoiceForm = ({ dbData }: CanceledInvoiceFormProps) => {
   const handleStateReset = (invSeriesId: string | undefined) => {
     // clear fields
 
+    setInvoiceDbData("none");
+    setInvoiceProductsDbData([]);
     setOldInvoiceSerie({
       id: "",
       name: "",
@@ -222,6 +225,7 @@ const CanceledInvoiceForm = ({ dbData }: CanceledInvoiceFormProps) => {
 
     if (invoiceDbData !== "none") {
       const newReturnInvoice = {
+        clientId: invoiceDbData.clientId,
         clientName: invoiceDbData.clientName,
         clientCui: invoiceDbData.clientCui,
         clientAddress: invoiceDbData.clientAddress,
@@ -285,9 +289,9 @@ const CanceledInvoiceForm = ({ dbData }: CanceledInvoiceFormProps) => {
     }
   }, [oldInvoiceSerie, oldInvoiceNumber]);
 
-  useEffect(() => {
-    console.log(returnedProducts);
-  }, [returnedProducts]);
+  // useEffect(() => {
+  //   console.log(returnedProducts);
+  // }, [returnedProducts]);
 
   return (
     <>
@@ -486,7 +490,7 @@ const CanceledInvoiceForm = ({ dbData }: CanceledInvoiceFormProps) => {
               <h2>Selected products</h2>
               <ul className="products-datalist">
                 {returnedProducts.map((item) => (
-                  <li key={item.id}>
+                  <li key={item.returnedInvoiceProductId}>
                     <div className="container">
                       <div className="box1">
                         <b>{item.name}</b>

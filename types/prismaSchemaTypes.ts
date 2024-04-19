@@ -49,10 +49,16 @@ export type InvoiceProductType = {
   totalValue: number;
 };
 
-export type ReturnedInvoiceProductType = InvoiceProductType & { productId: string; companyId: string; invoiceId: string };
+export type ReturnedInvoiceProductType = InvoiceProductType & {
+  returnedInvoiceProductId: string;
+  productId: string;
+  companyId: string;
+  invoiceId: string;
+};
 
 export type InvoiceType = {
   id: string;
+  clientId: string;
   clientName: string;
   clientCui: string;
   clientAddress: string;

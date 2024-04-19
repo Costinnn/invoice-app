@@ -38,6 +38,7 @@ export async function POST(request) {
     // CREATE INVOICE
     const newInvoice = await prisma.invoice.create({
       data: {
+        clientId: reqData.clientId,
         clientName: reqData.clientName,
         clientCui: reqData.clientCui,
         clientAddress: reqData.clientAddress,
@@ -145,9 +146,8 @@ export async function POST(request) {
       }
     }
 
-    // RESPONSE
+    // UPDATE SERIE NUMBER + RESPONSE
     if (newInvoice) {
-      // UPDATE SERIE NUMBER
       const updatedSerieNumber = await prisma.invoiceSeries.update({
         where: { id: reqData.invoiceSeriesId },
         data: {
